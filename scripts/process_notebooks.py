@@ -92,15 +92,15 @@ def main(arglist):
         clean_whitespace(nb)
 
         # Ensure that we have an executed notebook, in one of two ways
+        executor = ExecutePreprocessor(**exec_kws)
         if args.execute:
             # Check dynamically by executing and reporting errors
             print(f"Executing {nb_path}")
-            executor = ExecutePreprocessor(**exec_kws)
             error = execute_notebook(executor, nb, args.raise_fast)
         elif args.check_execution:
             # Check statically by examining the cell outputs
             print(f"Checking {nb_path} execution")
-            error = check_execution(nb, args.raise_fast)
+            error = check_execution(executor, nb, args.raise_fast)
         else:
             error = None
 
@@ -193,7 +193,7 @@ def execute_notebook(executor, nb, raise_fast):
             return error
 
 
-def check_execution(nb, raise_fast):
+def check_execution(executor, nb, raise_fast):
     """Check that all code cells with source have been executed without error."""
     error = None
     for cell in nb.get("cells", []):
@@ -210,6 +210,8 @@ def check_execution(nb, raise_fast):
         else:
             for output in cell["outputs"]:
                 if output["output_type"] == "error":
+                    if output["ename"] in executor.allow_error_names:
+                        continue
                     error = "\n".join(output["traceback"])
                     if raise_fast:
                         raise RuntimeError("\n" + error)
