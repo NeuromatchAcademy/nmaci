@@ -1,0 +1,5 @@
+nbformat
+nbconvert
+pillow
+flake8
+fuzzywuzzy[speedup]
