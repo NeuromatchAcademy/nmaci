@@ -7,7 +7,7 @@ on:
     branches: main
 
 env:
-  NB_KERNEL: python
+  NB_KERNEL: python3
   MPLBACKEND: Agg
 
 jobs:

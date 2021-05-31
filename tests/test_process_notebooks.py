@@ -10,7 +10,7 @@ def test_raises_not_implemented_error():
     assert not res.returncode
 
 
-def test_raises_not_name_error():
+def test_raises_name_error():
 
     nb = "tutorials/raises_name_error.ipynb"
     cmdline = ["python", "scripts/process_notebooks.py", "--check-only", nb]
