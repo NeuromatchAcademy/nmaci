@@ -25,7 +25,9 @@ jobs:
           python-version: 3.7
 
       - name: Install dependencies
-        run: pip install pytest -r requirements.txt
+        run: |
+          pip install pytest -r requirements.txt
+          jupyter kernelspec list
 
       - name: Execute tests
         run: pytest
