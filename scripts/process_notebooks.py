@@ -423,8 +423,8 @@ def make_sub_dir(nb_dir, name):
 def exit(errors):
     """Exit with message and status dependent on contents of errors dict."""
     for failed_file, error in errors.items():
-        print(f"{failed_file} failed quality control.")
-        print(error)
+        print(f"{failed_file} failed quality control.", file=sys.stderr)
+        print(error, file=sys.stderr)
 
     status = bool(errors)
     report = "Failure" if status else "Success"
