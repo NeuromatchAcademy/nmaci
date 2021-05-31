@@ -1,5 +1,6 @@
 nbformat
 nbconvert
+notebook
 pillow
 flake8
 fuzzywuzzy[speedup]
