@@ -368,6 +368,19 @@ def clean_whitespace(nb):
             cell["source"] = "\n".join(clean_lines)
 
 
+def test_clean_whitespace():
+
+    nb = {
+        "cells": [
+            {"cell_type": "code", "source": "import numpy  \nimport matplotlib   "},
+            {"cell_type": "markdown", "source": "# Test notebook  "},
+        ]
+    }
+    clean_whitespace(nb)
+    assert nb["cells"][0]["source"] == "import numpy\nimport matplotlib"
+    assert nb["cells"][1]["source"] == "# Test notebook  "
+
+
 def has_solution(cell):
     """Return True if cell is marked as containing an exercise solution."""
     cell_text = cell["source"].replace(" ", "").lower()
@@ -378,9 +391,35 @@ def has_solution(cell):
     )
 
 
+def test_has_solution():
+
+    cell = {"source": "# solution"}
+    assert not has_solution(cell)
+
+    cell = {"source": "def exercise():\n    pass\n# to_remove"}
+    assert not has_solution(cell)
+
+    cell = {"source": "# to_remove_solution\ndef exercise():\n    pass"}
+    assert has_solution(cell)
+
+
 def has_colab_badge(cell):
     """Return True if cell has a Colab badge as an HTML element."""
     return "colab-badge.svg" in cell["source"]
+
+
+def test_has_colab_badge():
+
+    cell = {
+        "source": "import numpy as np"
+    }
+    assert not has_colab_badge(cell)
+
+    cell = {
+        "source":
+        "<img src=\"https://colab.research.google.com/assets/colab-badge.svg\" "
+    }
+    assert has_colab_badge(cell)
 
 
 def redirect_colab_badge_to_master_branch(cell):
@@ -390,11 +429,50 @@ def redirect_colab_badge_to_master_branch(cell):
     cell["source"] = p.sub(r"\1master\2", cell_text)
 
 
+def test_redirect_colab_badge_to_master_branch():
+
+    original = (
+        "\"https://colab.research.google.com/github/NeuromatchAcademy/"
+        "course-content/blob/W1D1-updates/tutorials/W1D1_ModelTypes/"
+        "W1D1_Tutorial1.ipynb\""
+    )
+    cell = {"source": original}
+    redirect_colab_badge_to_master_branch(cell)
+
+    expected = (
+        "\"https://colab.research.google.com/github/NeuromatchAcademy/"
+        "course-content/blob/master/tutorials/W1D1_ModelTypes/"
+        "W1D1_Tutorial1.ipynb\""
+    )
+
+    assert cell["source"] == expected
+
+
 def redirect_colab_badge_to_student_version(cell):
     """Modify the Colab badge to point at student version of the notebook."""
     cell_text = cell["source"]
     p = re.compile(r"(^.+/tutorials/W\dD\d\w+)/(\w+\.ipynb.+)")
     cell["source"] = p.sub(r"\1/student/\2", cell_text)
+
+
+def test_redirect_colab_badge_to_student_version():
+
+    original = (
+        "\"https://colab.research.google.com/github/NeuromatchAcademy/"
+        "course-content/blob/master/tutorials/W1D1_ModelTypes/"
+        "W1D1_Tutorial1.ipynb\""
+    )
+
+    cell = {"source": original}
+    redirect_colab_badge_to_student_version(cell)
+
+    expected = (
+        "\"https://colab.research.google.com/github/NeuromatchAcademy/"
+        "course-content/blob/master/tutorials/W1D1_ModelTypes/student/"
+        "W1D1_Tutorial1.ipynb\""
+    )
+
+    assert cell["source"] == expected
 
 
 def sequentially_executed(nb):
