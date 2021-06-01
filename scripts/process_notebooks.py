@@ -3,7 +3,9 @@
 - Filter input file list for .ipynb files
 - Check that the cells have been executed sequentially on a fresh kernel
 - Strip trailing whitespace from all code lines
-- Execute the notebook and fail if errors are encountered
+- Either:
+  - Execute the notebook and fail if errors are encountered
+  - Check that all code cells have been executed without error
 - Extract solution code and write a .py file with the solution
 - Replace solution cells with a "hint" image and a link to the solution code
 - Redirect Colab-inserted badges to the master branch
@@ -67,8 +69,8 @@ def main(arglist):
         exec_kws["kernel_name"] = os.environ["NB_KERNEL"]
 
     # Defer failures until after processing all notebooks
-    errors = {}
     notebooks = {}
+    errors = {}
 
     for nb_path in nb_paths:
 
@@ -89,20 +91,23 @@ def main(arglist):
         # Clean whitespace from all code cells
         clean_whitespace(nb)
 
-        # Run the notebook from top to bottom, catching errors
-        print(f"Executing {nb_path}")
+        # Ensure that we have an executed notebook, in one of two ways
         executor = ExecutePreprocessor(**exec_kws)
-        try:
-            executor.preprocess(nb)
-        except Exception as err:
-            if args.raise_fast:
-                # Exit here (useful for debugging)
-                raise err
-            else:
-                # Log the error, but then continue
-                errors[nb_path] = err
+        if args.execute:
+            # Check dynamically by executing and reporting errors
+            print(f"Executing {nb_path}")
+            error = execute_notebook(executor, nb, args.raise_fast)
+        elif args.check_execution:
+            # Check statically by examining the cell outputs
+            print(f"Checking {nb_path} execution")
+            error = check_execution(executor, nb, args.raise_fast)
         else:
+            error = None
+
+        if error is None:
             notebooks[nb_path] = nb
+        else:
+            errors[nb_path] = error
 
     if errors or args.check_only:
         exit(errors)
@@ -174,6 +179,45 @@ def main(arglist):
 
 
 # ------------------------------------------------------------------------------------ #
+
+def execute_notebook(executor, nb, raise_fast):
+    """Execute the notebook, returning errors to be handled."""
+    try:
+        executor.preprocess(nb)
+    except Exception as error:
+        if raise_fast:
+            # Exit here (useful for debugging)
+            raise error
+        else:
+            # Raise the error to be handled by the caller
+            return error
+
+
+def check_execution(executor, nb, raise_fast):
+    """Check that all code cells with source have been executed without error."""
+    error = None
+    for cell in nb.get("cells", []):
+
+        # Only check code cells
+        if cell["cell_type"] != "code":
+            continue
+
+        if cell["source"] and cell["execution_count"] is None:
+            error = "Notebook has unexecuted code cell(s)."
+            if raise_fast:
+                raise RuntimeError(error)
+            break
+        else:
+            for output in cell["outputs"]:
+                if output["output_type"] == "error":
+                    if output["ename"] in executor.allow_error_names:
+                        continue
+                    error = "\n".join(output["traceback"])
+                    if raise_fast:
+                        raise RuntimeError("\n" + error)
+                    break
+
+    return error
 
 
 def extract_solutions(nb, nb_dir, nb_name):
@@ -399,22 +443,33 @@ def parse_args(arglist):
         help="File name(s) to process. Will filter for .ipynb extension."
     )
     parser.add_argument(
+        "--execute",
+        action="store_true",
+        help="Execute the notebook and fail if errors are encountered."
+    )
+    parser.add_argument(
+        "--check-execution",
+        action="store_true",
+        dest="check_execution",
+        help="Check that each code cell has been executed and did not error."
+    )
+    parser.add_argument(
+        "--allow-non-sequential",
+        action="store_false",
+        dest="require_sequential",
+        help="Don't fail if the notebook is not sequentially executed."
+    )
+    parser.add_argument(
         "--check-only",
         action="store_true",
         dest="check_only",
-        help="Only run QC checks; don't do post-processing"
+        help="Only run QC checks; don't do post-processing."
     )
     parser.add_argument(
         "--raise-fast",
         action="store_true",
         dest="raise_fast",
         help="Raise errors immediately rather than collecting and reporting."
-    )
-    parser.add_argument(
-        "--allow-non-sequential",
-        action="store_false",
-        dest="require_sequential",
-        help="Don't fail if the notebook is not sequentially executed"
     )
     return parser.parse_args(arglist)
 
