@@ -189,8 +189,8 @@ def make_colab_badge(local_path):
     badge_svg = "https://colab.research.google.com/assets/colab-badge.svg"
     url_base = (
         "https://colab.research.google.com/"
-        "github/NeuromatchAcademy/course-content/blob/master"
-    )
+        "github/NeuromatchAcademy/course-content/blob/"
+    ) + os.environ.get("NMA_MAIN_BRANCH", "main")
     return make_badge(alt_text, badge_svg, url_base, local_path)
 
 
@@ -200,8 +200,8 @@ def make_nbviewer_badge(local_path):
     badge_svg = "https://img.shields.io/badge/render-nbviewer-orange.svg"
     url_base = (
         "https://nbviewer.jupyter.org/"
-        "github/NeuromatchAcademy/course-content/blob/master"
-    )
+        "github/NeuromatchAcademy/course-content/blob/"
+    ) + os.environ.get("NMA_MAIN_BRANCH", "main")
     return make_badge(
         alt_text, badge_svg, url_base, f"{local_path}?flush_cache=true"
     )
