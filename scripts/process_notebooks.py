@@ -8,7 +8,7 @@
   - Check that all code cells have been executed without error
 - Extract solution code and write a .py file with the solution
 - Replace solution cells with a "hint" image and a link to the solution code
-- Redirect Colab-inserted badges to the master branch
+- Redirect Colab-inserted badges to the main branch
 - Set the Colab notebook name field based on file path
 - Standardize some Colab settings (always have ToC, always hide form cells)
 - Clean the notebooks (remove outputs and noisy metadata)
@@ -31,12 +31,14 @@ from PIL import Image
 import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
 
+# Backcompat for the CN repo which still uses master
+MAIN_BRANCH = os.environ.get("NMA_MAIN_BRANCH", "main")
 
 GITHUB_RAW_URL = (
-    "https://raw.githubusercontent.com/NeuromatchAcademy/course-content/master"
+    f"https://raw.githubusercontent.com/NeuromatchAcademy/course-content/{MAIN_BRANCH}"
 )
 GITHUB_TREE_URL = (
-    "https://github.com/NeuromatchAcademy/course-content/tree/master/"
+    f"https://github.com/NeuromatchAcademy/course-content/tree/{MAIN_BRANCH}/"
 )
 
 
@@ -129,7 +131,7 @@ def main(arglist):
         # Loop through the cells and fix any Colab badges we encounter
         for cell in nb.get("cells", []):
             if has_colab_badge(cell):
-                redirect_colab_badge_to_master_branch(cell)
+                redirect_colab_badge_to_main_branch(cell)
 
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
@@ -422,14 +424,14 @@ def test_has_colab_badge():
     assert has_colab_badge(cell)
 
 
-def redirect_colab_badge_to_master_branch(cell):
-    """Modify the Colab badge to point at the master branch on Github."""
+def redirect_colab_badge_to_main_branch(cell):
+    """Modify the Colab badge to point at the main branch on Github."""
     cell_text = cell["source"]
     p = re.compile(r"^(.+/NeuromatchAcademy/course-content/blob/)[\w-]+(/.+$)")
-    cell["source"] = p.sub(r"\1master\2", cell_text)
+    cell["source"] = p.sub(r"\1" + MAIN_BRANCH + r"\2", cell_text)
 
 
-def test_redirect_colab_badge_to_master_branch():
+def test_redirect_colab_badge_to_main_branch():
 
     original = (
         "\"https://colab.research.google.com/github/NeuromatchAcademy/"
@@ -437,11 +439,11 @@ def test_redirect_colab_badge_to_master_branch():
         "W1D1_Tutorial1.ipynb\""
     )
     cell = {"source": original}
-    redirect_colab_badge_to_master_branch(cell)
+    redirect_colab_badge_to_main_branch(cell)
 
     expected = (
         "\"https://colab.research.google.com/github/NeuromatchAcademy/"
-        "course-content/blob/master/tutorials/W1D1_ModelTypes/"
+        "course-content/blob/main/tutorials/W1D1_ModelTypes/"
         "W1D1_Tutorial1.ipynb\""
     )
 
@@ -459,7 +461,7 @@ def test_redirect_colab_badge_to_student_version():
 
     original = (
         "\"https://colab.research.google.com/github/NeuromatchAcademy/"
-        "course-content/blob/master/tutorials/W1D1_ModelTypes/"
+        "course-content/blob/main/tutorials/W1D1_ModelTypes/"
         "W1D1_Tutorial1.ipynb\""
     )
 
@@ -468,7 +470,7 @@ def test_redirect_colab_badge_to_student_version():
 
     expected = (
         "\"https://colab.research.google.com/github/NeuromatchAcademy/"
-        "course-content/blob/master/tutorials/W1D1_ModelTypes/student/"
+        "course-content/blob/main/tutorials/W1D1_ModelTypes/student/"
         "W1D1_Tutorial1.ipynb\""
     )
 
