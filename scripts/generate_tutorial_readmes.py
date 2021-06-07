@@ -7,6 +7,10 @@ import os
 from glob import glob
 
 
+REPO = os.environ.get("NMA_REPO", "course-content")
+MAIN_BRANCH = os.environ.get("NMA_MAIN_BRANCH", "main")
+
+
 def main():
 
     # Initialize the lines in tutorials/README.md
@@ -187,28 +191,21 @@ def make_colab_badge(local_path):
     """Generate a Google Colaboratory badge for a notebook on github."""
     alt_text = "Open In Colab"
     badge_svg = "https://colab.research.google.com/assets/colab-badge.svg"
-    url_base = (
-        "https://colab.research.google.com/"
-        "github/NeuromatchAcademy/course-content/blob/"
-    ) + os.environ.get("NMA_MAIN_BRANCH", "main")
-    return make_badge(alt_text, badge_svg, url_base, local_path)
+    service = "https://colab.research.google.com"
+    return make_badge(alt_text, badge_svg, service, local_path)
 
 
 def make_nbviewer_badge(local_path):
     """Generate an NBViewer badge for a notebook on github."""
     alt_text = "View the notebook"
     badge_svg = "https://img.shields.io/badge/render-nbviewer-orange.svg"
-    url_base = (
-        "https://nbviewer.jupyter.org/"
-        "github/NeuromatchAcademy/course-content/blob/"
-    ) + os.environ.get("NMA_MAIN_BRANCH", "main")
-    return make_badge(
-        alt_text, badge_svg, url_base, f"{local_path}?flush_cache=true"
-    )
+    service = "https://nbviewer.jupyter.org/"
+    return make_badge(alt_text, badge_svg, service, f"{local_path}?flush_cache=true")
 
 
-def make_badge(alt_text, badge_svg, url_base, local_path):
+def make_badge(alt_text, badge_svg, service, local_path):
     """Generate a markdown element for a badge image that links to a file."""
+    url_base = f"{service}/github/NeuromatchAcademy/{REPO}/blob/{MAIN_BRANCH}"
     return f"[![{alt_text}]({badge_svg})]({url_base}/{local_path})"
 
 
