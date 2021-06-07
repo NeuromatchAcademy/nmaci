@@ -88,7 +88,7 @@ def make_colab_badge(branch, nb_dir, nb_fname, student=False):
 def parse_args(arglist):
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--branch", default="master")
+    parser.add_argument("--branch", default=os.environ.get("NMA_MAIN_BRANCH", "main"))
     parser.add_argument("--output")
     parser.add_argument("notebooks", nargs="*")
     return parser.parse_args(arglist)
