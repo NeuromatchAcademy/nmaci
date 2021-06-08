@@ -31,14 +31,14 @@ from PIL import Image
 import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
 
-# Backcompat for the CN repo which still uses master
+REPO = os.environ.get("NMA_REPO", "course-content")
 MAIN_BRANCH = os.environ.get("NMA_MAIN_BRANCH", "main")
 
 GITHUB_RAW_URL = (
-    f"https://raw.githubusercontent.com/NeuromatchAcademy/course-content/{MAIN_BRANCH}"
+    f"https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/{MAIN_BRANCH}"
 )
 GITHUB_TREE_URL = (
-    f"https://github.com/NeuromatchAcademy/course-content/tree/{MAIN_BRANCH}/"
+    f"https://github.com/NeuromatchAcademy/{REPO}/tree/{MAIN_BRANCH}/"
 )
 
 
