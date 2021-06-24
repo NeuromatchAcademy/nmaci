@@ -4,3 +4,4 @@ notebook
 pillow
 flake8
 fuzzywuzzy[speedup]
+pyyaml
