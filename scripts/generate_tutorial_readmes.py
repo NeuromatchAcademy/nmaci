@@ -174,32 +174,21 @@ def write_badge_table(notebooks):
         "| - | --- | ---- |",
     ]
 
-    # Add intro
-    intro_file = [name for name in notebooks if 'Intro' in name]
-    if len(intro_file) == 1:
-        colab_badge = make_colab_badge(intro_file[0])
-        nbviewer_badge = make_nbviewer_badge(intro_file[0])
-        table_text.append(
-            f"| Intro | {colab_badge} | {nbviewer_badge} |"
-        )
+    # Get ordered list of file names
+    notebook_list = [name for name in notebooks if 'Intro' in name]
+    notebook_list += [name for name in notebooks if 'Tutorial' in name]
+    notebook_list += [name for name in notebooks if 'Outro' in name]
 
-    # Add tutorials
-    for i, local_path in enumerate([name for name in notebooks if 'Tutorial' in name], 1):
+    # Add badges
+    for local_path in notebook_list:
+        notebook_name = local_path.split('_')[-1].split('.ipynb')[0]
+        if 'Tutorial' in notebook_name:
+            notebook_name = f"Tutorial {notebook_name.split('Tutorial')[1]}"
         colab_badge = make_colab_badge(local_path)
         nbviewer_badge = make_nbviewer_badge(local_path)
         table_text.append(
-            f"| Tutorial {i} | {colab_badge} | {nbviewer_badge} |"
+            f"| {notebook_name} | {colab_badge} | {nbviewer_badge} |"
         )
-
-    # Add outro
-    outro_file = [name for name in notebooks if 'Outro' in name]
-    if len(outro_file) == 1:
-        colab_badge = make_colab_badge(outro_file[0])
-        nbviewer_badge = make_nbviewer_badge(outro_file[0])
-        table_text.append(
-            f"| Outro | {colab_badge} | {nbviewer_badge} |"
-        )
-
     table_text.append("\n")
 
     return table_text
