@@ -5,7 +5,7 @@ Run this script from the root of the github repository.
 """
 import os
 from glob import glob
-
+import yaml
 
 REPO = os.environ.get("NMA_REPO", "course-content")
 MAIN_BRANCH = os.environ.get("NMA_MAIN_BRANCH", "main")
