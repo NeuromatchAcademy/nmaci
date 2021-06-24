@@ -96,7 +96,7 @@ def main():
         # Add further reading
         further_reading_file = f"{day_path}/further_reading.md"
         if os.path.exists(further_reading_file):
-            course_readme_text.extend([f"[Further Reading](https://github.com/NeuromatchAcademy/course-content/blob/master/{further_reading_file})"])
+            course_readme_text.extend([f"[Further Reading](https://github.com/NeuromatchAcademy/{REPO}/blob/{MAIN_BRANCH}/{further_reading_file})"])
             course_readme_text.append("\n")
 
         # Now make the day-specific README
