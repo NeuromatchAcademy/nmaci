@@ -181,7 +181,10 @@ def write_badge_table(notebooks):
 
     # Add badges
     for local_path in notebook_list:
+        # Extract type of file (intro vs outro vs tutorial)
         notebook_name = local_path.split('_')[-1].split('.ipynb')[0]
+
+        # Add space between Tutorial and number
         if 'Tutorial' in notebook_name:
             notebook_name = f"Tutorial {notebook_name.split('Tutorial')[1]}"
         colab_badge = make_colab_badge(local_path)
