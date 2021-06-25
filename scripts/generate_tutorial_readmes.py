@@ -5,7 +5,7 @@ Run this script from the root of the github repository.
 """
 import os
 from glob import glob
-
+import yaml
 
 REPO = os.environ.get("NMA_REPO", "course-content")
 MAIN_BRANCH = os.environ.get("NMA_MAIN_BRANCH", "main")
@@ -60,8 +60,8 @@ def main():
             "-",
             ("-".join(topic_words)).lower(),
         ])
-        if "W0" not in day_code:
-            day_anchors[day_code] = "#" + anchor
+
+        day_anchors[day_code] = "#" + anchor
 
         student_notebooks = get_student_links(notebooks)
 
@@ -92,6 +92,13 @@ def main():
 
         course_readme_text.extend(write_badge_table(student_notebooks))
         course_readme_text.append("\n")
+
+        # Add further reading
+        further_reading_file = f"{day_path}/further_reading.md"
+        if os.path.exists(further_reading_file):
+            reading_url = f"https://github.com/NeuromatchAcademy/{REPO}/blob/{MAIN_BRANCH}/{further_reading_file})"
+            course_readme_text.extend([f"[Further Reading]({reading_url})"])
+            course_readme_text.append("\n")
 
         # Now make the day-specific README
         # with links to both instructor and student versions
@@ -138,21 +145,23 @@ def main():
 
 def load_youtube_playlist_urls():
     """Create a mapping from day code to youtube link based on text file."""
-    with open("tutorials/youtube_playlists.txt") as f:
-        lines = filter(bool, f.read().split("\n"))
-    return dict(tuple(line.split()) for line in lines)
+    with open('tutorials/materials.yml') as fh:
+        materials = yaml.load(fh, Loader=yaml.FullLoader)
+    days = [m['day'] for m in materials]
+    playlists = [m['playlist'] for m in materials]
+    return dict(zip(days, playlists))
 
 
 def load_slide_urls():
     """Create a hierarchical mapping to slide PDF urls based on text file."""
-    with open("tutorials/slide_links.txt") as f:
-        lines = filter(bool, f.read().split("\n"))
+    with open('tutorials/materials.yml') as fh:
+        materials = yaml.load(fh, Loader=yaml.FullLoader)
     slide_links = {}
-    for line in lines:
-        day, topic, url = line.split()
-        if day not in slide_links:
-            slide_links[day] = []
-        slide_links[day].append((topic, url))
+    for ind, day_dict in enumerate(materials):
+        if 'slides' in day_dict:
+            slide_links[day_dict['day']] = []
+            for slide_info in day_dict['slides']:
+                slide_links[day_dict['day']].append((slide_info['title'], slide_info['link']))
     return slide_links
 
 
@@ -165,13 +174,23 @@ def write_badge_table(notebooks):
         "| - | --- | ---- |",
     ]
 
-    # Add each row of the table
-    for i, local_path in enumerate(notebooks, 1):
+    # Get ordered list of file names
+    notebook_list = [name for name in notebooks if 'Intro' in name]
+    notebook_list += [name for name in notebooks if 'Tutorial' in name]
+    notebook_list += [name for name in notebooks if 'Outro' in name]
 
+    # Add badges
+    for local_path in notebook_list:
+        # Extract type of file (intro vs outro vs tutorial)
+        notebook_name = local_path.split('_')[-1].split('.ipynb')[0]
+
+        # Add space between Tutorial and number
+        if 'Tutorial' in notebook_name:
+            notebook_name = f"Tutorial {notebook_name.split('Tutorial')[1]}"
         colab_badge = make_colab_badge(local_path)
         nbviewer_badge = make_nbviewer_badge(local_path)
         table_text.append(
-            f"| Tutorial {i} | {colab_badge} | {nbviewer_badge} |"
+            f"| {notebook_name} | {colab_badge} | {nbviewer_badge} |"
         )
     table_text.append("\n")
 
@@ -182,8 +201,11 @@ def get_student_links(instructor_notebooks):
     """Convert a list of instructor notebook paths to student versions."""
     student_notebooks = []
     for instructor_nb in instructor_notebooks:
-        day_path, nb_fname = os.path.split(instructor_nb)
-        student_notebooks.append(f"{day_path}/student/{nb_fname}")
+        if 'Tutorial' in instructor_nb:
+            day_path, nb_fname = os.path.split(instructor_nb)
+            student_notebooks.append(f"{day_path}/student/{nb_fname}")
+        else:
+            student_notebooks.append(instructor_nb)
     return student_notebooks
 
 
