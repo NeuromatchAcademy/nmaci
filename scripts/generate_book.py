@@ -53,6 +53,16 @@ def main():
 
     # Turn toc into list
     toc_list = [{'file': 'intro.md'}]
+    
+    # Technical help chapter
+    chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/tech_intro.md',
+               'sections': [{'file': 'tutorials/TechnicalHelp/Jupyterbook.md',
+                             'sections': [
+                                 {'file': 'tutorials/TechnicalHelp/Tutorial_colab.md'},
+                                 {'file': 'tutorials/TechnicalHelp/Tutorial_kaggle.md'}
+                             ]},
+                            {'file': 'tutorials/TechnicalHelp/Discord.md' }]}]}
+    toc_list += [chapter]
     for key in toc.keys():
         toc_list.append(toc[key])
 
