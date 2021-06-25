@@ -28,6 +28,11 @@ def main():
                 if 'NotImplementedError' in str(div):
                     div.decompose()
 
+            # Put solution figures in center (to fix layout issues) 
+            for img in parsed_html.find_all('img', alt= True):
+                if img['alt'] == 'Solution hint':
+                    img['align'] = 'center'
+                    
             # save out html
             with open(notebook_file_path, 'w') as f:
                 f.write(str(parsed_html))
