@@ -9,6 +9,7 @@ import sys
 import argparse
 import subprocess
 
+REPO = os.environ.get("NMA_REPO", "course-content")
 
 def main(arglist):
 
@@ -79,7 +80,7 @@ def make_colab_badge(branch, nb_dir, nb_fname, student=False):
         nb_dir = os.path.join(nb_dir, "student")
     url = (
         "https://colab.research.google.com/"
-        "github/NeuromatchAcademy/course-content/blob/"
+        f"github/NeuromatchAcademy/{REPO}/blob/"
         f"{branch}/{nb_dir}/{nb_fname}"
     )
     return f"[![{alt_text}]({badge_svg})]({url})"
