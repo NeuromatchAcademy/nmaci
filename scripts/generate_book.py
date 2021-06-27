@@ -71,17 +71,14 @@ def main():
 
 
 def pre_process_notebook(file_path):
-    try:
-        with open(file_path, encoding="utf-8") as read_notebook:
-            content = json.load(read_notebook)
-        pre_processed_content = open_in_colab_new_tab(content)
-        pre_processed_content = change_video_widths(pre_processed_content)
-        pre_processed_content = link_hidden_cells(pre_processed_content)
-        with open(file_path, "w", encoding="utf-8") as write_notebook:
-            json.dump(pre_processed_content, write_notebook, indent=1, ensure_ascii=False)
-    except Exception:
-        print("Exception occurred while trying to pre_process file = {}. Skipping this file.".format(file_path))
-        traceback.print_exc()
+
+    with open(file_path, encoding="utf-8") as read_notebook:
+        content = json.load(read_notebook)
+    pre_processed_content = open_in_colab_new_tab(content)
+    pre_processed_content = change_video_widths(pre_processed_content)
+    pre_processed_content = link_hidden_cells(pre_processed_content)
+    with open(file_path, "w", encoding="utf-8") as write_notebook:
+        json.dump(pre_processed_content, write_notebook, indent=1, ensure_ascii=False)
 
 
 def open_in_colab_new_tab(content):
@@ -104,8 +101,11 @@ def link_hidden_cells(content):
             continue
         source = cell['source'][0]
 
-        if source.startswith("#") and '@title' not in source:
+        if source.startswith("#") and cell['cell_type'] == 'markdown':
             header_level = source.count('#')
+        elif source.startswith("---") and cell['cell_type'] == 'markdown':
+            if len(cell['source']) > 1 and cell['source'][1].startswith("#") and cell['cell_type'] == 'markdown':
+                header_level = cell['source'][1].count('#')
 
         if '@title' in source or '@markdown' in source:
             if 'metadata' not in cell:
