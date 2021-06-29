@@ -15,7 +15,8 @@ def main():
            'Intro to Modeling': {'part': 'Intro to Modeling', 'chapters': []},
            'Machine Learning': {'part': 'Machine Learning', 'chapters': []},
            'Dynamical Systems': {'part': 'Dynamical Systems', 'chapters': []},
-           'Stochastic Processes': {'part': 'Stochastic Processes', 'chapters': []}}
+           'Stochastic Processes': {'part': 'Stochastic Processes', 'chapters': []},
+            'Projects': {'part': 'Projects', 'chapters': []}}
 
     for m in materials:
         directory = f"{m['day']}_{''.join(m['name'].split())}"
@@ -50,7 +51,31 @@ def main():
 
         # Add chapter
         toc[part]['chapters'].append(chapter)
+    
+# Add project section
+    part = 'Projects'
+    toc[part]['chapters'].append({'file': 'projects/docs/project_guidance.md'})
 
+    toc[part]['chapters'].append({'file': 'projects/docs/datasets_overview.md',
+                                  'sections': [
+                                      {'file': 'projects/docs/ephys_calcium_imaging.md',
+                                       'sections': [
+                                           {'file': 'projects/docs/steinmetz.md',
+                                            'sections': [{'file': 'projects/neurons/load_steinmetz_decisions.ipynb'},
+                                                          {'file': 'projects/neurons/load_steinmetz_extra.ipynb'}]
+                                            },
+                                           {'file': 'projects/docs/calcium_imaging.md',
+                                            'sections': [{'file': 'projects/neurons//load_stringer_orientations.ipynb'},
+                                                         {'file': 'projects/neurons//load_stringer_spontaneous.ipynb'}]
+                                            }
+                                       ]
+                                       },
+                                  ]})
+    toc[part]['chapters'].append({'file': 'projects/project_templates/intro.md',
+                                  'sections': [
+                                      {'file': 'projects/project_templates/embed_image.md'}
+
+                                  ]})
     # Turn toc into list
     toc_list = [{'file': 'intro.md'}]
     
