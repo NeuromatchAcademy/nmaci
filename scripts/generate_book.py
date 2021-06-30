@@ -16,7 +16,7 @@ def main():
            'Machine Learning': {'part': 'Machine Learning', 'chapters': []},
            'Dynamical Systems': {'part': 'Dynamical Systems', 'chapters': []},
            'Stochastic Processes': {'part': 'Stochastic Processes', 'chapters': []},
-            'Projects': {'part': 'Projects', 'chapters': []}}
+            'Project Booklet': {'part': 'Project Booklet', 'chapters': []}}
 
     for m in materials:
         directory = f"{m['day']}_{''.join(m['name'].split())}"
@@ -53,29 +53,34 @@ def main():
         toc[part]['chapters'].append(chapter)
     
 # Add project section
-    part = 'Projects'
+    # Add project section
+    with open('projects/project_materials.yml') as fh:
+        project_materials = yaml.load(fh, Loader=yaml.FullLoader)
+
+    part = 'Project Booklet'
     toc[part]['chapters'].append({'file': 'projects/docs/project_guidance.md'})
 
-    toc[part]['chapters'].append({'file': 'projects/docs/datasets_overview.md',
-                                  'sections': [
-                                      {'file': 'projects/docs/ephys_calcium_imaging.md',
-                                       'sections': [
-                                           {'file': 'projects/docs/steinmetz.md',
-                                            'sections': [{'file': 'projects/neurons/load_steinmetz_decisions.ipynb'},
-                                                          {'file': 'projects/neurons/load_steinmetz_extra.ipynb'}]
-                                            },
-                                           {'file': 'projects/docs/calcium_imaging.md',
-                                            'sections': [{'file': 'projects/neurons//load_stringer_orientations.ipynb'},
-                                                         {'file': 'projects/neurons//load_stringer_spontaneous.ipynb'}]
-                                            }
-                                       ]
-                                       },
-                                  ]})
-    toc[part]['chapters'].append({'file': 'projects/project_templates/intro.md',
-                                  'sections': [
-                                      {'file': 'projects/project_templates/embed_image.md'}
+    # Loop over dataset types
+    project_datasets = {'file': 'projects/docs/datasets_overview.md',
+                        'sections': []}
+    for category in ['neurons', 'fMRI', 'ECoG', 'behavior']:
+        this_section = {'file': f'projects/docs/{category}.md',
+                        'sections': []}
 
-                                  ]})
+        # Add and process all notebooks
+        this_section['sections'].append({'file': f"projects/{category}/{category}_videos.ipynb"})
+        pre_process_notebook(f"projects/{category}/{category}_videos.ipynb")
+
+        dataset_loaders = [entry for entry in project_materials if entry['category'] == category]
+        for notebook in dataset_loaders:
+            this_section['sections'].append({'file': notebook['link'], 'title': notebook['title']})
+            pre_process_notebook(notebook['link'])
+        project_datasets['sections'].append(this_section)
+    toc[part]['chapters'].append(project_datasets)
+    toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
+    toc[part]['chapters'].append({'file': 'projects/docs/project_2020_highlights.md'})
+    toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
+
     # Turn toc into list
     toc_list = [{'file': 'intro.md'}]
     
