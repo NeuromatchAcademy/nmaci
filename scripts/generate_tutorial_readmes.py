@@ -221,7 +221,7 @@ def make_nbviewer_badge(local_path):
     """Generate an NBViewer badge for a notebook on github."""
     alt_text = "View the notebook"
     badge_svg = "https://img.shields.io/badge/render-nbviewer-orange.svg"
-    service = "https://nbviewer.jupyter.org/"
+    service = "https://nbviewer.jupyter.org"
     return make_badge(alt_text, badge_svg, service, f"{local_path}?flush_cache=true")
 
 
