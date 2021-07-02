@@ -332,12 +332,16 @@ def clean_notebook(nb):
             if not cell["metadata"]["id"].startswith("view-in"):
                 cell["metadata"].pop("id")
 
-        # Remove code cell outputs
         if cell["cell_type"] == "code":
-            cell["outputs"] = []
 
-        # Ensure that form cells are hidden by default
-        if cell["cell_type"] == "code":
+            # Clear out execution status information
+            cell["execution"] = {}
+
+            # Remove code cell outputs
+            cell["outputs"] = []
+            cell.pop("outputID", None)
+
+            # Ensure that form cells are hidden by default
             first_line, *_ = cell["source"].splitlines()
             if "@title" in first_line or "@markdown" in first_line:
                 cell["metadata"]["cellView"] = "form"
