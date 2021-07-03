@@ -54,7 +54,7 @@ def main():
 
         # Add chapter
         toc[part]['chapters'].append(chapter)
-    
+
 
     # Add project section
     with open('projects/project_materials.yml') as fh:
@@ -67,7 +67,7 @@ def main():
     project_datasets = {'file': 'projects/docs/datasets_overview.md',
                         'sections': []}
     for category in ['neurons', 'fMRI', 'ECoG', 'behavior']:
-        this_section = {'file': f'projects/docs/{category}.md',
+        this_section = {'file': f'projects/{category}/README.md',
                         'sections': []}
 
         # Add and process all notebooks
