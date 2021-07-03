@@ -32,6 +32,7 @@ def main():
             for img in parsed_html.find_all('img', alt= True):
                 if img['alt'] == 'Solution hint':
                     img['align'] = 'center'
+                    img['class'] = 'align-center'
                     
             # save out html
             with open(notebook_file_path, 'w') as f:
