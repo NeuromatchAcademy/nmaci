@@ -324,7 +324,8 @@ def clean_notebook(nb):
                 cell[key] = None
 
         if "metadata" in cell:
-            for field in ["collapsed", "scrolled", "ExecuteTime"]:
+            cell.metadata["execution"] = {}
+            for field in ["colab", "collapsed", "scrolled", "ExecuteTime", "outputId"]:
                 cell.metadata.pop(field, None)
 
         # Reset cell-level Colab metadata
@@ -334,12 +335,8 @@ def clean_notebook(nb):
 
         if cell["cell_type"] == "code":
 
-            # Clear out execution status information
-            cell["execution"] = {}
-
             # Remove code cell outputs
             cell["outputs"] = []
-            cell.pop("outputID", None)
 
             # Ensure that form cells are hidden by default
             first_line, *_ = cell["source"].splitlines()
