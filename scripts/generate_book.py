@@ -24,7 +24,10 @@ def main():
         # Make temporary chapter title file
         with open(f"tutorials/{directory}/chapter_title.md",
                   "w+") as title_file:
-            title_file.write(f"# {m['name']}")
+            title_page = f"# {m['name']}"
+            if os.path.exists(f"tutorials/{directory}/{m['day']}_chapter_cover.png"):
+                title_page += f"\n\n ````{{div}} full-width \n <img src='{m['day']}_chapter_cover.png' alt='Wrench labeled neuromatch on top of a phone' width='100%'> \n```` \n\n*Artwork by Daniela Buchwald*"
+            title_file.write(title_page)
 
         chapter = {'file': f"tutorials/{directory}/chapter_title.md",
                    'title': f"{m['name']} ({m['day']})",
@@ -52,7 +55,7 @@ def main():
         # Add chapter
         toc[part]['chapters'].append(chapter)
     
-# Add project section
+
     # Add project section
     with open('projects/project_materials.yml') as fh:
         project_materials = yaml.load(fh, Loader=yaml.FullLoader)
@@ -82,8 +85,16 @@ def main():
     toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
 
     # Turn toc into list
-    toc_list = [{'file': 'intro.md'}]
-    
+    toc_list = [{'file': 'tutorials/intro.ipynb'}]
+    pre_process_notebook('tutorials/intro.ipynb')
+
+    # Schedule chapter
+    chapter = {'chapters': [{'file': 'tutorials/Schedule/schedule_intro.md',
+               'sections': [{'file': 'tutorials/Schedule/daily_schedules.md'},
+                            {'file': 'tutorials/Schedule/shared_calendars.md'},
+                            {'file': 'tutorials/Schedule/timezone_widget.md'}]}]}
+    toc_list += [chapter]
+
     # Technical help chapter
     chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/tech_intro.md',
                'sections': [{'file': 'tutorials/TechnicalHelp/Jupyterbook.md',
@@ -153,6 +164,7 @@ def link_hidden_cells(content):
 
             # If header is lost, create one in markdown
             if '@title' in source:
+
                 if source.split('@title')[1] != '':
                     header_cell = {
                         'cell_type': 'markdown',
@@ -160,6 +172,18 @@ def link_hidden_cells(content):
                         'source': ['#'*(header_level + 1) + ' ' + source.split('@title')[1]]}
                     updated_cells.insert(i_updated_cell, header_cell)
                     i_updated_cell += 1
+
+            strings_with_markdown = [(i, string) for i, string in enumerate(cell['source']) if '@markdown' in string]
+            if len(strings_with_markdown) == 1:
+                i = strings_with_markdown[0][0]
+                if cell['source'][i].split('@markdown')[1] != '':
+                    header_cell = {
+                        'cell_type': 'markdown',
+                        'metadata': {},
+                        'source': [cell['source'][i].split('@markdown')[1]]}
+                    updated_cells.insert(i_updated_cell, header_cell)
+                    i_updated_cell += 1
+
         i_updated_cell += 1
 
     content['cells'] = updated_cells
