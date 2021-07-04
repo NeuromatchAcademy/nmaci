@@ -62,6 +62,20 @@ def main():
 
     part = 'Project Booklet'
     toc[part]['chapters'].append({'file': 'projects/docs/project_guidance.md'})
+    
+    # Add Modeling Steps
+    toc[part]['chapters'].append({'file': 'projects/modelingsteps/intro.md',
+                                     'sections': [
+                                         {'file': 'projects/modelingsteps/ModelingSteps_1through4.ipynb'},
+                                         {'file': 'projects/modelingsteps/ModelingSteps_5through10.ipynb'},
+                                         {'file': 'projects/modelingsteps/TrainIllusionModel.ipynb'},
+                                         {'file': 'projects/modelingsteps/TrainIllusionDataProject.ipynb'}
+                                     ]
+                                     })
+    pre_process_notebook('projects/modelingsteps/ModelingSteps_1through4.ipynb')
+    pre_process_notebook('projects/modelingsteps/ModelingSteps_5through10.ipynb')
+    pre_process_notebook('projects/modelingsteps/TrainIllusionModel.ipynb')
+    pre_process_notebook('projects/modelingsteps/TrainIllusionDataProject.ipynb')
 
     # Loop over dataset types
     project_datasets = {'file': 'projects/docs/datasets_overview.md',
