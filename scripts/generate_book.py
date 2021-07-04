@@ -102,15 +102,7 @@ def main():
     toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
 
     # Projects 2020
-    toc[part]['chapters'].append({'file': 'projects/docs/projects_2020/project_2020.md',
-                                  'sections': [
-                                      {'file': 'projects/docs/projects_2020/neurons.md'},
-                                      {'file': 'projects/docs/projects_2020/theory.md'},
-                                      {'file': 'projects/docs/projects_2020/behavior.md'},
-                                      {'file': 'projects/docs/projects_2020/fMRI.md'},
-                                      {'file': 'projects/docs/projects_2020/eeg.md'}
-                                  ]
-                                  })
+    toc[part]['chapters'].append({'file': 'projects/docs/project_2020_highlights.md'})
 
     toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
 
