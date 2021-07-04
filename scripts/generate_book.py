@@ -61,6 +61,7 @@ def main():
         project_materials = yaml.load(fh, Loader=yaml.FullLoader)
 
     part = 'Project Booklet'
+    toc[part]['chapters'].append({'file': 'projects/README.md', 'title': 'Introduction'})
     toc[part]['chapters'].append({'file': 'projects/docs/project_guidance.md'})
     
     # Add Modeling Steps
@@ -80,9 +81,13 @@ def main():
     # Loop over dataset types
     project_datasets = {'file': 'projects/docs/datasets_overview.md',
                         'sections': []}
+
     for category in ['neurons', 'fMRI', 'ECoG', 'behavior']:
-        this_section = {'file': f'projects/{category}/README.md',
+        this_section = {'file': f'projects/docs/{category}.md',
                         'sections': []}
+
+        # Add README guide
+        this_section['sections'].append({'file': f"projects/{category}/README.md", 'title': 'Guide'})
 
         # Add and process all notebooks
         this_section['sections'].append({'file': f"projects/{category}/{category}_videos.ipynb"})
@@ -95,7 +100,18 @@ def main():
         project_datasets['sections'].append(this_section)
     toc[part]['chapters'].append(project_datasets)
     toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
-    toc[part]['chapters'].append({'file': 'projects/docs/project_2020_highlights.md'})
+
+    # Projects 2020
+    toc[part]['chapters'].append({'file': 'projects/docs/projects_2020/project_2020.md',
+                                  'sections': [
+                                      {'file': 'projects/docs/projects_2020/neurons.md'},
+                                      {'file': 'projects/docs/projects_2020/theory.md'},
+                                      {'file': 'projects/docs/projects_2020/behavior.md'},
+                                      {'file': 'projects/docs/projects_2020/fMRI.md'},
+                                      {'file': 'projects/docs/projects_2020/eeg.md'}
+                                  ]
+                                  })
+
     toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
 
     # Turn toc into list
