@@ -6,3 +6,4 @@ flake8
 fuzzywuzzy[speedup]
 pyyaml
 beautifulsoup4
+decorator==5.0.9
