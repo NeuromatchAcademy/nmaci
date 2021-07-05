@@ -24,8 +24,7 @@ def main():
         directory = f"{m['day']}_{''.join(m['name'].split())}"
 
         # Make temporary chapter title file
-        with open(f"tutorials/{directory}/chapter_title.md",
-                  "w+") as title_file:
+        with open(f"tutorials/{directory}/chapter_title.md", "w+") as title_file:
             title_page = f"# {m['name']}"
             if os.path.exists(f"tutorials/{directory}/{m['day']}_chapter_cover.png"):
                 title_page += f"\n\n ````{{div}} full-width \n <img src='{m['day']}_chapter_cover.png' alt='Wrench labeled neuromatch on top of a phone' width='100%'> \n```` \n\n*Artwork by Daniela Buchwald*"
