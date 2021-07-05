@@ -90,9 +90,11 @@ def main():
         this_section['sections'].append({'file': f"projects/{category}/README.md", 'title': 'Guide'})
 
         # Add and process all notebooks
-        this_section['sections'].append({'file': f"projects/{category}/{category}_videos.ipynb"})
-        pre_process_notebook(f"projects/{category}/{category}_videos.ipynb")
-
+        try:
+            this_section['sections'].append({'file': f"projects/{category}/{category}_videos.ipynb"})
+            pre_process_notebook(f"projects/{category}/{category}_videos.ipynb")
+        except:
+            pass
 #         dataset_loaders = [entry for entry in project_materials if entry['category'] == category]
 #         for notebook in dataset_loaders:
 #             this_section['sections'].append({'file': notebook['link'], 'title': notebook['title']})
