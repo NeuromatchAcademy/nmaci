@@ -110,8 +110,8 @@ def main():
         toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
 
     # Turn toc into list
+    toc_list = [{'file': 'tutorials/intro.ipynb'}]
     if os.path.exists("tutorials/intro.ipynb"):
-        toc_list = [{'file': 'tutorials/intro.ipynb'}]
         pre_process_notebook('tutorials/intro.ipynb')
 
     # Schedule chapter
