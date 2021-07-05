@@ -6,6 +6,7 @@ import traceback
 import json
 from bs4 import BeautifulSoup
 
+REPO = os.environ.get("NMA_REPO", "course-content")
 
 def main():
     with open('tutorials/materials.yml') as fh:
@@ -39,11 +40,9 @@ def main():
 
         # Make list of notebook sections
         notebook_list = []
-        notebook_list += [f"{directory}/{m['day']}_Intro.ipynb"] if os.path.exists(
-            f"{directory}/{m['day']}_Intro.ipynb") else []
+        notebook_list += [f"{directory}/{m['day']}_Intro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Intro.ipynb") else []
         notebook_list += [f"{directory}/student/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
-        notebook_list += [f"{directory}/{m['day']}_Outro.ipynb"] if os.path.exists(
-            f"{directory}/{m['day']}_Outro.ipynb") else []
+        notebook_list += [f"{directory}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
 
         # Add and process all notebooks
         for notebook_file_path in notebook_list:
@@ -56,9 +55,8 @@ def main():
         # Add chapter
         toc[part]['chapters'].append(chapter)
 
-
-    # Add project section
-    if os.path.exists("projects/"):
+    # Project chapter -- based on the repo
+    if REPO == "course-content":
         with open('projects/project_materials.yml') as fh:
             project_materials = yaml.load(fh, Loader=yaml.FullLoader)
 
@@ -68,25 +66,21 @@ def main():
 
         # Add Modeling Steps
         toc[part]['chapters'].append({'file': 'projects/modelingsteps/intro.md',
-                                         'sections': [
-                                             {'file': 'projects/modelingsteps/ModelingSteps_1through4.ipynb'},
-                                             {'file': 'projects/modelingsteps/ModelingSteps_5through10.ipynb'},
-                                             {'file': 'projects/modelingsteps/TrainIllusionModel.ipynb'},
-                                             {'file': 'projects/modelingsteps/TrainIllusionDataProject.ipynb'}
-                                         ]
-                                         })
+                                      'sections': [{'file': 'projects/modelingsteps/ModelingSteps_1through4.ipynb'},
+                                                   {'file': 'projects/modelingsteps/ModelingSteps_5through10.ipynb'},
+                                                   {'file': 'projects/modelingsteps/TrainIllusionModel.ipynb'},
+                                                   {'file': 'projects/modelingsteps/TrainIllusionDataProject.ipynb'}
+                                                  ]})
         pre_process_notebook('projects/modelingsteps/ModelingSteps_1through4.ipynb')
         pre_process_notebook('projects/modelingsteps/ModelingSteps_5through10.ipynb')
         pre_process_notebook('projects/modelingsteps/TrainIllusionModel.ipynb')
         pre_process_notebook('projects/modelingsteps/TrainIllusionDataProject.ipynb')
 
         # Loop over dataset types
-        project_datasets = {'file': 'projects/docs/datasets_overview.md',
-                            'sections': []}
+        project_datasets = {'file': 'projects/docs/datasets_overview.md', 'sections': []}
 
         for category in ['neurons', 'fMRI', 'ECoG', 'behavior', 'theory']:
-            this_section = {'file': f'projects/docs/{category}.md',
-                            'sections': []}
+            this_section = {'file': f'projects/docs/{category}.md', 'sections': []}
 
             # Add README guide
             this_section['sections'].append({'file': f"projects/{category}/README.md", 'title': 'Guide'})
@@ -107,13 +101,12 @@ def main():
 
         # Projects 2020
         toc[part]['chapters'].append({'file': 'projects/docs/project_2020_highlights.md',
-                  'sections': [{'file': 'projects/docs/projects_2020/neurons.md'},
-                               {'file': 'projects/docs/projects_2020/theory.md'},
-                               {'file': 'projects/docs/projects_2020/behavior.md'},
-                               {'file': 'projects/docs/projects_2020/fMRI.md'},
-                               {'file': 'projects/docs/projects_2020/eeg.md'}
-                               ]})
-
+                                      'sections': [{'file': 'projects/docs/projects_2020/neurons.md'},
+                                                   {'file': 'projects/docs/projects_2020/theory.md'},
+                                                   {'file': 'projects/docs/projects_2020/behavior.md'},
+                                                   {'file': 'projects/docs/projects_2020/fMRI.md'},
+                                                   {'file': 'projects/docs/projects_2020/eeg.md'}
+                                                  ]})
         toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
 
     # Turn toc into list
@@ -123,19 +116,21 @@ def main():
 
     # Schedule chapter
     chapter = {'chapters': [{'file': 'tutorials/Schedule/schedule_intro.md',
-               'sections': [{'file': 'tutorials/Schedule/daily_schedules.md'},
-                            {'file': 'tutorials/Schedule/shared_calendars.md'},
-                            {'file': 'tutorials/Schedule/timezone_widget.md'}]}]}
+                             'sections': [{'file': 'tutorials/Schedule/daily_schedules.md'},
+                                          {'file': 'tutorials/Schedule/shared_calendars.md'},
+                                          {'file': 'tutorials/Schedule/timezone_widget.md'}
+                                         ]}]}
     toc_list += [chapter]
 
     # Technical help chapter
-    chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/tech_intro.md',
-               'sections': [{'file': 'tutorials/TechnicalHelp/Jupyterbook.md',
-                             'sections': [
-                                 {'file': 'tutorials/TechnicalHelp/Tutorial_colab.md'},
-                                 {'file': 'tutorials/TechnicalHelp/Tutorial_kaggle.md'}
-                             ]},
-                            {'file': 'tutorials/TechnicalHelp/Discord.md' }]}]}
+    chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/tech_intro.md', 
+                             'sections': [{'file': 'tutorials/TechnicalHelp/Jupyterbook.md',
+                                           'sections': [{'file': 'tutorials/TechnicalHelp/Tutorial_colab.md'},
+                                                        {'file': 'tutorials/TechnicalHelp/Tutorial_kaggle.md'}
+                                                       ]
+                                          },
+                                          {'file': 'tutorials/TechnicalHelp/Discord.md'}
+                                         ]}]}
     toc_list += [chapter]
     for key in toc.keys():
         toc_list.append(toc[key])
