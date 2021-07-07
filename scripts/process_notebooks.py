@@ -324,7 +324,8 @@ def clean_notebook(nb):
                 cell[key] = None
 
         if "metadata" in cell:
-            for field in ["collapsed", "scrolled", "ExecuteTime"]:
+            cell.metadata["execution"] = {}
+            for field in ["colab", "collapsed", "scrolled", "ExecuteTime", "outputId"]:
                 cell.metadata.pop(field, None)
 
         # Reset cell-level Colab metadata
@@ -332,12 +333,12 @@ def clean_notebook(nb):
             if not cell["metadata"]["id"].startswith("view-in"):
                 cell["metadata"].pop("id")
 
-        # Remove code cell outputs
         if cell["cell_type"] == "code":
+
+            # Remove code cell outputs
             cell["outputs"] = []
 
-        # Ensure that form cells are hidden by default
-        if cell["cell_type"] == "code":
+            # Ensure that form cells are hidden by default
             first_line, *_ = cell["source"].splitlines()
             if "@title" in first_line or "@markdown" in first_line:
                 cell["metadata"]["cellView"] = "form"
