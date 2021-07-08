@@ -18,7 +18,7 @@ def main():
            'Stochastic Processes': {'part': 'Stochastic Processes', 'chapters': []},
             'Project Booklet': {'part': 'Project Booklet', 'chapters': []}}
 
-    art_file_list = os.listdir('tutorials/NeuroArt/')
+    art_file_list = os.listdir('tutorials/Art/')
 
     for m in materials:
         directory = f"{m['day']}_{''.join(m['name'].split())}"
@@ -31,7 +31,7 @@ def main():
             if len(art_file) == 1:
                 artist = art_file[0].split('-')[1].split('.')[0]
                 artist = artist.replace('_', ' ')
-                title_page += f"\n\n ````{{div}} full-width \n <img src='{art_file[0]}' alt='art relevant to chapter contents' width='100%'> \n```` \n\n*Artwork by {artist}*"
+                title_page += f"\n\n ````{{div}} full-width \n <img src='../Art/{art_file[0]}' alt='art relevant to chapter contents' width='100%'> \n```` \n\n*Artwork by {artist}*"
             title_file.write(title_page)
 
         chapter = {'file': f"tutorials/{directory}/chapter_title.md",
