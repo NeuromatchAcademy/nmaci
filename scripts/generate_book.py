@@ -29,7 +29,7 @@ def main():
             title_page = f"# {m['name']}"
             art_file = [fname for fname in art_file_list if m['day'] in fname]
             if len(art_file) == 1:
-                artist = image_file[0].split('-')[1].split('.')[0]
+                artist = art_file[0].split('-')[1].split('.')[0]
                 artist = artist.replace('_', ' ')
                 title_page += f"\n\n ````{{div}} full-width \n <img src='{art_file[0]}' alt='art relevant to chapter contents' width='100%'> \n```` \n\n*Artwork by {artist}*"
             title_file.write(title_page)
