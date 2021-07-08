@@ -18,6 +18,8 @@ def main():
            'Stochastic Processes': {'part': 'Stochastic Processes', 'chapters': []},
             'Project Booklet': {'part': 'Project Booklet', 'chapters': []}}
 
+    art_file_list = os.listdir('tutorials/NeuroArt/')
+
     for m in materials:
         directory = f"{m['day']}_{''.join(m['name'].split())}"
 
@@ -25,8 +27,11 @@ def main():
         with open(f"tutorials/{directory}/chapter_title.md",
                   "w+") as title_file:
             title_page = f"# {m['name']}"
-            if os.path.exists(f"tutorials/{directory}/{m['day']}_chapter_cover.png"):
-                title_page += f"\n\n ````{{div}} full-width \n <img src='{m['day']}_chapter_cover.png' alt='Wrench labeled neuromatch on top of a phone' width='100%'> \n```` \n\n*Artwork by Daniela Buchwald*"
+            art_file = [fname for fname in art_file_list if m['day'] in fname]
+            if len(art_file) == 1:
+                artist = image_file[0].split('-')[1].split('.')[0]
+                artist = artist.replace('_', ' ')
+                title_page += f"\n\n ````{{div}} full-width \n <img src='{art_file[0]}' alt='art relevant to chapter contents' width='100%'> \n```` \n\n*Artwork by {artist}*"
             title_file.write(title_page)
 
         chapter = {'file': f"tutorials/{directory}/chapter_title.md",
