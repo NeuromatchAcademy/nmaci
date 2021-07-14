@@ -140,6 +140,12 @@ def main():
                                          ]}]}
     toc_list += [chapter]
     for key in toc.keys():
+        
+        # Add wrap-up if it exists
+        wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
+        if os.path.exists(wrapup_name):
+            toc[key]['chapters'].append({'file': wrapup_name})
+        
         toc_list.append(toc[key])
 
     with open('book/_toc.yml', 'w') as fh:
