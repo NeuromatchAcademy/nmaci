@@ -114,7 +114,6 @@ def main():
                                                    {'file': 'projects/docs/projects_2020/fMRI.md'},
                                                    {'file': 'projects/docs/projects_2020/eeg.md'}
                                                   ]})
-        toc[part]['chapters'].append({'file': 'projects/docs/abstract_guidance.md'})
 
     # Turn toc into list
     toc_list = [{'file': 'tutorials/intro.ipynb'}]
