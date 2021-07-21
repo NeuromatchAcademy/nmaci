@@ -183,7 +183,7 @@ def change_video_widths(content):
                 cell['source'][ind] = cell['source'][ind].replace('480', '410')
 
         # Put slides in ipywidget so they don't overlap margin
-        if len(cell['source']) > 1 and 'HTML' in cell['source'][1]:
+        if len(cell['source']) > 1 and 'IFrame' in cell['source'][1]:
             slide_link = ''.join(cell['source']).split('"')[1].split(", width")[0][:-1]
             cell['source'] = ['# @markdown\n',
                               'from IPython.display import IFrame\n',
