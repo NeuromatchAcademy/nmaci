@@ -80,9 +80,14 @@ def main():
     pre_process_notebook('projects/modelingsteps/ModelingSteps_7through9_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/ModelingSteps_10_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/TrainIllusionDataProjectDL.ipynb')
+    
+    # Add code templates
+    toc[part]['chapters'].append({'file': 'projects/code/intro.md',
+                                  'sections': [{'file': 'projects/code/segmentation_denoising.ipynb'},
+                                              ]})    
 
-
-    toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
+    # Add project templates
+    # toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
 
     # Turn toc into list
     toc_list = [{'file': 'tutorials/intro.ipynb'}]
