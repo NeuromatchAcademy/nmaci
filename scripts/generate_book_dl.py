@@ -71,7 +71,7 @@ def main():
                                                {'file': 'projects/modelingsteps/ModelingSteps_5through6_DL.ipynb'},
                                                {'file': 'projects/modelingsteps/ModelingSteps_7through9_DL.ipynb'},
                                                {'file': 'projects/modelingsteps/ModelingSteps_10_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/TrainIllusionDataProject.ipynb'}
+                                               {'file': 'projects/modelingsteps/TrainIllusionDataProjectDL.ipynb'}
                                               ]})
 
     pre_process_notebook('projects/modelingsteps/ModelingSteps_1through2_DL.ipynb')
@@ -79,7 +79,7 @@ def main():
     pre_process_notebook('projects/modelingsteps/ModelingSteps_5through6_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/ModelingSteps_7through9_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/ModelingSteps_10_DL.ipynb')
-    pre_process_notebook('projects/modelingsteps/TrainIllusionDataProject.ipynb')
+    pre_process_notebook('projects/modelingsteps/TrainIllusionDataProjectDL.ipynb')
 
 
     toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
