@@ -57,7 +57,7 @@ def main():
 
         # Add chapter
         toc[part]['chapters'].append(chapter)
-    
+
     # Project chapter -- under construction
 
     part = 'Project Booklet'
@@ -85,6 +85,8 @@ def main():
     toc[part]['chapters'].append({'file': 'projects/code/intro.md',
                                   'sections': [{'file': 'projects/code/segmentation_denoising.ipynb'},
                                               ]})    
+    
+    pre_process_notebook('projects/code/segmentation_denoising.ipynb')
 
     # Add project templates
     # toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
@@ -113,12 +115,12 @@ def main():
                                          ]}]}
     toc_list += [chapter]
     for key in toc.keys():
-        
+
         # Add wrap-up if it exists
         wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
         if os.path.exists(wrapup_name):
             toc[key]['chapters'].append({'file': wrapup_name})
-        
+
         toc_list.append(toc[key])
 
     with open('book/_toc.yml', 'w') as fh:
