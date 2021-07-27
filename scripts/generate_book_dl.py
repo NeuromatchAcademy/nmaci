@@ -91,7 +91,7 @@ def main():
     pre_process_notebook('projects/code/segmentation_denoising.ipynb')
 
     # Add project templates
-    # toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
+    toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
 
     # Turn toc into list
     toc_list = [{'file': 'tutorials/intro.ipynb'}]
