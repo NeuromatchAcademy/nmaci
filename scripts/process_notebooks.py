@@ -64,7 +64,7 @@ def main(arglist):
 
     # Set execution parameters. We allow NotImplementedError as that is raised
     # by incomplete exercises and is unlikely to be otherwise encountered.
-    exec_kws = {"timeout": 7200, "allow_error_names": ["NotImplementedError"]}
+    exec_kws = {"timeout": 14400, "allow_error_names": ["NotImplementedError"]}
 
     # Allow environment to override stored kernel name
     if "NB_KERNEL" in os.environ:
