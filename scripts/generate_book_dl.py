@@ -71,7 +71,8 @@ def main():
                                                {'file': 'projects/modelingsteps/ModelingSteps_5through6_DL.ipynb'},
                                                {'file': 'projects/modelingsteps/ModelingSteps_7through9_DL.ipynb'},
                                                {'file': 'projects/modelingsteps/ModelingSteps_10_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/TrainIllusionDataProjectDL.ipynb'}
+                                               {'file': 'projects/modelingsteps/TrainIllusionDataProjectDL.ipynb'},
+                                               {'file': 'projects/modelingsteps/MoVi_motion_classification_steps.ipynb'}
                                               ]})
 
     pre_process_notebook('projects/modelingsteps/ModelingSteps_1through2_DL.ipynb')
@@ -80,6 +81,7 @@ def main():
     pre_process_notebook('projects/modelingsteps/ModelingSteps_7through9_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/ModelingSteps_10_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/TrainIllusionDataProjectDL.ipynb')
+    pre_process_notebook('projects/modelingsteps/MoVi_motion_classification_steps.ipynb')
     
     # Add code templates
     toc[part]['chapters'].append({'file': 'projects/code/intro.md',
