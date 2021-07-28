@@ -72,7 +72,8 @@ def main():
                                                {'file': 'projects/modelingsteps/ModelingSteps_7through9_DL.ipynb'},
                                                {'file': 'projects/modelingsteps/ModelingSteps_10_DL.ipynb'},
                                                {'file': 'projects/modelingsteps/TrainIllusionDataProjectDL.ipynb'},
-                                               {'file': 'projects/modelingsteps/MoVi_motion_classification_steps.ipynb'}
+                                               {'file': 'projects/modelingsteps/TrainIllusionModelingProjectDL.ipynb'},
+                                               {'file': 'projects/modelingsteps/Example_Deep_Learning_Project.ipynb'}
                                               ]})
 
     pre_process_notebook('projects/modelingsteps/ModelingSteps_1through2_DL.ipynb')
@@ -81,14 +82,21 @@ def main():
     pre_process_notebook('projects/modelingsteps/ModelingSteps_7through9_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/ModelingSteps_10_DL.ipynb')
     pre_process_notebook('projects/modelingsteps/TrainIllusionDataProjectDL.ipynb')
-    pre_process_notebook('projects/modelingsteps/MoVi_motion_classification_steps.ipynb')
+    pre_process_notebook('projects/modelingsteps/TrainIllusionModelingProjectDL.ipynb')
+    pre_process_notebook('projects/modelingsteps/Example_Deep_Learning_Project.ipynb')
     
     # Add code templates
     toc[part]['chapters'].append({'file': 'projects/code/intro.md',
                                   'sections': [{'file': 'projects/code/segmentation_denoising.ipynb'},
+                                               {'file': 'projects/code/PoseEstimation.ipynb'},
+                                               {'file': 'projects/code/RLymipcs.ipynb'},
+                                               {'file': 'projects/code/algonauts_videos.ipynb'},
                                               ]})    
     
     pre_process_notebook('projects/code/segmentation_denoising.ipynb')
+    pre_process_notebook('projects/code/PoseEstimation.ipynb')
+    pre_process_notebook('projects/code/RLymipcs.ipynb')
+    pre_process_notebook('projects/code/algonauts_videos.ipynb')
 
     # Add project templates
     toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
