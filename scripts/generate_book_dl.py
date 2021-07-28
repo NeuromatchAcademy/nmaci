@@ -93,10 +93,10 @@ def main():
                                                {'file': 'projects/code/algonauts_videos.ipynb'},
                                               ]})    
     
-    pre_process_notebook('projects/code/segmentation_denoising.ipynb')
-    pre_process_notebook('projects/code/PoseEstimation.ipynb')
-    pre_process_notebook('projects/code/RLymipcs.ipynb')
-    pre_process_notebook('projects/code/algonauts_videos.ipynb')
+    #pre_process_notebook('projects/code/segmentation_denoising.ipynb')
+    #pre_process_notebook('projects/code/PoseEstimation.ipynb')
+    #pre_process_notebook('projects/code/RLymipcs.ipynb')
+    #pre_process_notebook('projects/code/algonauts_videos.ipynb')
 
     # Add project templates
     toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
