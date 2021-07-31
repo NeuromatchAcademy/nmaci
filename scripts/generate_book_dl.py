@@ -78,12 +78,10 @@ def main():
     toc[part]['chapters'].append(this_section)
 
     # Loop over project folders
-    project_datasets = {
-        'file': 'projects/docs/projects_overview.md', 'sections': []}
+    project_datasets = {'file': 'projects/docs/projects_overview.md', 'sections': []}
     for category in ['ComputerVision', 'ReinforcementLearning', 'NaturalLanguageProcessing', 'Neuroscience']:
         # Add each category section
-        this_section = {'file': [f'projects/{category}/README.md',
-                                 f'projects/{category}/slides.md'], 'sections': []}
+        this_section = {'file': f'projects/{category}/README.md', 'file': f'projects/{category}/slides.md', 'sections': []}
         for m in project_materials:
             if m['category'] == category:
                 # Add and process all notebooks
