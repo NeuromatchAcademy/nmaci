@@ -81,7 +81,8 @@ def main():
     project_datasets = {'file': 'projects/docs/projects_overview.md', 'sections': []}
     for category in ['ComputerVision', 'ReinforcementLearning', 'NaturalLanguageProcessing', 'Neuroscience']:
         # Add each category section
-        this_section = {'file': f'projects/{category}/README.md', 'file': f'projects/{category}/slides.md', 'sections': []}
+        this_section = {'file': f'projects/{category}/README.md',
+                        'sections': [{'file': f'projects/{category}/slides.md']}}
         for m in project_materials:
             if m['category'] == category:
                 # Add and process all notebooks
