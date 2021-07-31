@@ -98,6 +98,27 @@ def main():
     #pre_process_notebook('projects/code/RLymipcs.ipynb')
     #pre_process_notebook('projects/code/algonauts_videos.ipynb')
 
+    for category in ['CV', 'RL', 'NLP', 'Neuro']:
+        this_section = {'file': f'projects/docs/{category}.md', 'sections': []}
+
+        # Add README guide
+        this_section['sections'].append({'file': f"projects/{category}/README.md", 'title': 'Ideas'})
+
+        # Add and process all notebooks
+        try:
+            this_section['sections'].append({'file': f"projects/{category}/{category}_videos.ipynb"})
+            pre_process_notebook(f"projects/{category}/{category}_videos.ipynb")
+        except:
+            pass
+        #         dataset_loaders = [entry for entry in project_materials if entry['category'] == category]
+        #         for notebook in dataset_loaders:
+        #             this_section['sections'].append({'file': notebook['link'], 'title': notebook['title']})
+        #             pre_process_notebook(notebook['link'])
+
+        project_datasets['sections'].append(this_section)
+    
+    toc[part]['chapters'].append(project_datasets)
+
     # Add project templates
     toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
 
