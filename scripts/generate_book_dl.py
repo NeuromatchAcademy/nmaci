@@ -61,62 +61,38 @@ def main():
     # Project chapter -- under construction
 
     part = 'Project Booklet'
-    toc[part]['chapters'].append({'file': 'projects/README.md', 'title': 'Introduction'})
+    toc[part]['chapters'].append(
+        {'file': 'projects/README.md', 'title': 'Introduction'})
     toc[part]['chapters'].append({'file': 'projects/docs/project_guidance.md'})
 
-    # Add Modeling Steps
-    toc[part]['chapters'].append({'file': 'projects/modelingsteps/intro.md',
-                                  'sections': [{'file': 'projects/modelingsteps/ModelingSteps_1through2_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/ModelingSteps_3through4_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/ModelingSteps_5through6_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/ModelingSteps_7through9_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/ModelingSteps_10_DL.ipynb'},
-                                               {'file': 'projects/modelingsteps/TrainIllusionDataProjectDL.ipynb'},
-                                               {'file': 'projects/modelingsteps/TrainIllusionModelingProjectDL.ipynb'},
-                                               {'file': 'projects/modelingsteps/Example_Deep_Learning_Project.ipynb'}
-                                              ]})
+    with open('projects/project_materials.yml') as fh:
+        project_materials = yaml.load(fh, Loader=yaml.FullLoader)
 
-    pre_process_notebook('projects/modelingsteps/ModelingSteps_1through2_DL.ipynb')
-    pre_process_notebook('projects/modelingsteps/ModelingSteps_3through4_DL.ipynb')
-    pre_process_notebook('projects/modelingsteps/ModelingSteps_5through6_DL.ipynb')
-    pre_process_notebook('projects/modelingsteps/ModelingSteps_7through9_DL.ipynb')
-    pre_process_notebook('projects/modelingsteps/ModelingSteps_10_DL.ipynb')
-    pre_process_notebook('projects/modelingsteps/TrainIllusionDataProjectDL.ipynb')
-    pre_process_notebook('projects/modelingsteps/TrainIllusionModelingProjectDL.ipynb')
-    pre_process_notebook('projects/modelingsteps/Example_Deep_Learning_Project.ipynb')
-    
-    # Add code templates
-    toc[part]['chapters'].append({'file': 'projects/code/intro.md',
-                                  'sections': [{'file': 'projects/code/segmentation_denoising.ipynb'},
-                                               {'file': 'projects/code/PoseEstimation.ipynb'},
-                                               {'file': 'projects/code/RLymipcs.ipynb'},
-                                               {'file': 'projects/code/algonauts_videos.ipynb'},
-                                              ]})    
-    
-    #pre_process_notebook('projects/code/segmentation_denoising.ipynb')
-    #pre_process_notebook('projects/code/PoseEstimation.ipynb')
-    #pre_process_notebook('projects/code/RLymipcs.ipynb')
-    #pre_process_notebook('projects/code/algonauts_videos.ipynb')
+    # Add modelling steps
+    category = 'modelingsteps'
+    this_section = {'file': f'projects/{category}/intro.md', 'sections': []}
+    for m in project_materials:
+        if m['category'] == category:
+            this_section['sections'].append({'file': f"projects/{category}/{m['link']}"})
+            pre_process_notebook(f"projects/{category}/{m['link']}")
+    toc[part]['chapters'].append(this_section)
 
-    for category in ['CV', 'RL', 'NLP', 'Neuro']:
-        this_section = {'file': f'projects/docs/{category}.md', 'sections': []}
-
-        # Add README guide
-        this_section['sections'].append({'file': f"projects/{category}/README.md", 'title': 'Ideas'})
-
-        # Add and process all notebooks
-        try:
-            this_section['sections'].append({'file': f"projects/{category}/{category}_videos.ipynb"})
-            pre_process_notebook(f"projects/{category}/{category}_videos.ipynb")
-        except:
-            pass
-        #         dataset_loaders = [entry for entry in project_materials if entry['category'] == category]
-        #         for notebook in dataset_loaders:
-        #             this_section['sections'].append({'file': notebook['link'], 'title': notebook['title']})
-        #             pre_process_notebook(notebook['link'])
-
+    # Loop over project folders
+    project_datasets = {
+        'file': 'projects/docs/projects_overview.md', 'sections': []}
+    for category in ['ComputerVision', 'ReinforcementLearning', 'NaturalLanguageProcessing', 'Neuroscience']:
+        # Add each category section
+        this_section = {'file': [f'projects/{category}/README.md',
+                                 f'projects/{category}/slides.md'], 'sections': []}
+        for m in project_materials:
+            if m['category'] == category:
+                # Add and process all notebooks
+                try:
+                    this_section['sections'].append({'file': f"projects/{category}/{m['link']}"})
+                    # pre_process_notebook(f"projects/{category}/{m['link']}")
+                except:
+                    pass
         project_datasets['sections'].append(this_section)
-    
     toc[part]['chapters'].append(project_datasets)
 
     # Add project templates
