@@ -59,7 +59,6 @@ def main():
         toc[part]['chapters'].append(chapter)
 
     # Project chapter -- under construction
-
     part = 'Project Booklet'
     toc[part]['chapters'].append(
         {'file': 'projects/README.md', 'title': 'Introduction'})
@@ -77,8 +76,10 @@ def main():
             pre_process_notebook(f"projects/{category}/{m['link']}")
     toc[part]['chapters'].append(this_section)
     print(category)
-    # Loop over project folders
+    
+    # Add project templates
     project_datasets = {'file': 'projects/docs/projects_overview.md', 'sections': []}
+    # Loop over project categories
     for category in ['ComputerVision', 'ReinforcementLearning', 'NaturalLanguageProcessing', 'Neuroscience']:
         print(category)
         # Add each category section
@@ -94,9 +95,6 @@ def main():
                     pass
         project_datasets['sections'].append(this_section)
     toc[part]['chapters'].append(project_datasets)
-
-    # Add project templates
-    # toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
 
     # Turn toc into list
     toc_list = [{'file': 'tutorials/intro.ipynb'}]
@@ -121,8 +119,8 @@ def main():
                                           {'file': 'tutorials/TechnicalHelp/Discord.md'}
                                          ]}]}
     toc_list += [chapter]
-    for key in toc.keys():
 
+    for key in toc.keys():
         # Add wrap-up if it exists
         wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
         if os.path.exists(wrapup_name):
