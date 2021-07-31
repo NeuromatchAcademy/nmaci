@@ -53,7 +53,7 @@ def main():
             pre_process_notebook(notebook_file_path)
 
         # Add further reading page
-        chapter['sections'].append({'file': f"{directory}/further_reading.md"})
+        # chapter['sections'].append({'file': f"{directory}/further_reading.md"})
 
         # Add chapter
         toc[part]['chapters'].append(chapter)
