@@ -76,10 +76,11 @@ def main():
             this_section['sections'].append({'file': f"projects/{category}/{m['link']}"})
             pre_process_notebook(f"projects/{category}/{m['link']}")
     toc[part]['chapters'].append(this_section)
-
+    print(category)
     # Loop over project folders
     project_datasets = {'file': 'projects/docs/projects_overview.md', 'sections': []}
     for category in ['ComputerVision', 'ReinforcementLearning', 'NaturalLanguageProcessing', 'Neuroscience']:
+        print(category)
         # Add each category section
         this_section = {'file': f'projects/{category}/README.md',
                         'sections': [{'file': f'projects/{category}/slides.md'}]}
