@@ -90,7 +90,7 @@ def main():
                 # Add and process all notebooks
                 try:
                     this_section['sections'].append({'file': f"projects/{category}/{m['link']}"})
-                    # pre_process_notebook(f"projects/{category}/{m['link']}")
+                    pre_process_notebook(f"projects/{category}/{m['link']}")
                 except:
                     pass
         project_datasets['sections'].append(this_section)
