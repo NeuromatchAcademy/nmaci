@@ -60,8 +60,7 @@ def main():
 
     # Project chapter -- under construction
     part = 'Project Booklet'
-    toc[part]['chapters'].append(
-        {'file': 'projects/README.md', 'title': 'Introduction'})
+    toc[part]['chapters'].append({'file': 'projects/README.md', 'title': 'Introduction'})
     toc[part]['chapters'].append({'file': 'projects/docs/project_guidance.md'})
 
     with open('projects/project_materials.yml') as fh:
@@ -97,6 +96,8 @@ def main():
         project_datasets['sections'].append(this_section)
     toc[part]['chapters'].append(project_datasets)
 
+    # Add models and datasets
+    toc[part]['chapters'].append({'file': 'projects/docs/datasets_and_models.md'})
     # Turn toc into list
     toc_list = [{'file': 'tutorials/intro.ipynb'}]
     if os.path.exists("tutorials/intro.ipynb"):
