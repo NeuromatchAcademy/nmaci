@@ -84,7 +84,7 @@ def main():
         print(category)
         # Add each category section
         this_section = {'file': f'projects/{category}/README.md',
-                        'sections': [{'file': f'projects/{category}/slides.md'},
+                        'sections': [{'file': f'projects/{category}/slides.md', 'title': ''},
                                      {'file': f'projects/{category}/ideas_and_datasets.md'}]}
         for m in project_materials:
             if m['category'] == category:
