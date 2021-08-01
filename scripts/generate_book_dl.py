@@ -83,13 +83,13 @@ def main():
         print(category)
         # Add each category section
         this_section = {'file': f'projects/{category}/README.md',
-                        'sections': [{'file': f'projects/{category}/slides.md', 'title': ''},
+                        'sections': [{'file': f'projects/{category}/slides.md'},
                                      {'file': f'projects/{category}/ideas_and_datasets.md'}]}
         for m in project_materials:
             if m['category'] == category:
                 # Add and process all notebooks
                 try:
-                    this_section['sections'].append({'file': f"projects/{category}/{m['link']}", 'title': m['title']})
+                    this_section['sections'].append({'file': f"projects/{category}/{m['link']}"})
                     pre_process_notebook(f"projects/{category}/{m['link']}")
                 except:
                     pass
