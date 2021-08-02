@@ -188,6 +188,7 @@ def main(arglist):
     for nb_path, nb in projects.items():
 
         # Extract components of the notebook path
+        nb_dir, nb_fname = os.path.split(nb_path)
         nb_name, _ = os.path.splitext(nb_fname)
 
         # Loop through the cells and fix any Colab badges we encounter
