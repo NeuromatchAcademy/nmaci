@@ -114,7 +114,7 @@ def main(arglist):
     if errors or args.check_only:
         exit(errors)
 
-    # Further filter the notebooks to run post-processing only on tutorials
+    # Further filter the notebooks to run post-processing only on tutorials and projects
     tuts_projs = {
         nb_path: nb
         for nb_path, nb in notebooks.items()
@@ -341,7 +341,7 @@ def clean_notebook(nb, flag='tutorials'):
         if cell["cell_type"] == "code":
             
             if flag == 'tutorials':
-                # Remove code cell outputs
+                # Remove code cell outputs only in tutorials
                 cell["outputs"] = []
 
             # Ensure that form cells are hidden by default
