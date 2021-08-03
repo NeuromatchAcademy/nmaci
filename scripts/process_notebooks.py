@@ -202,7 +202,7 @@ def main(arglist):
         # Clean the original notebook and save it to disk
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
-            nb_clean = clean_notebook(nb)
+            nb_clean = clean_notebook(nb, flag='projects')
             nbformat.write(nb_clean, f)
 
     exit(errors)
@@ -325,7 +325,7 @@ def extract_solutions(nb, nb_dir, nb_name):
     return nb, static_images, solution_snippets
 
 
-def clean_notebook(nb):
+def clean_notebook(nb, flag='tutorials'):
     """Remove cell outputs and most unimportant metadata."""
     # Always operate on a copy of the input notebook
     nb = deepcopy(nb)
@@ -362,9 +362,10 @@ def clean_notebook(nb):
                 cell["metadata"].pop("id")
 
         if cell["cell_type"] == "code":
-
-            # Remove code cell outputs
-            cell["outputs"] = []
+            
+            if flag == 'tutorials':
+                # Remove code cell outputs
+                cell["outputs"] = []
 
             # Ensure that form cells are hidden by default
             first_line, *_ = cell["source"].splitlines()
