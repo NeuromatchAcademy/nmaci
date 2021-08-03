@@ -115,14 +115,14 @@ def main(arglist):
         exit(errors)
 
     # Further filter the notebooks to run post-processing only on tutorials
-    tutorials = {
+    tuts_projs = {
         nb_path: nb
         for nb_path, nb in notebooks.items()
-        if nb_path.startswith("tutorials")
+        if nb_path.startswith("tutorials") or nb_path.startswith("projects")
     }
 
     # Post-process notebooks to remove solution code and write both versions
-    for nb_path, nb in tutorials.items():
+    for nb_path, nb in tuts_projs.items():
 
         # Extract components of the notebook path
         nb_dir, nb_fname = os.path.split(nb_path)
@@ -139,71 +139,48 @@ def main(arglist):
         # Clean the original notebook and save it to disk
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
-            nb_clean = clean_notebook(nb)
+            if nb_path.startswith("tutorials"):
+                nb_clean = clean_notebook(nb)
+            elif nb_path.startswith("projects"):
+                nb_clean = clean_notebook(nb, flag='projects')
+            
             nbformat.write(nb_clean, f)
 
-        # Create subdirectories, if they don't exist
-        student_dir = make_sub_dir(nb_dir, "student")
-        static_dir = make_sub_dir(nb_dir, "static")
-        solutions_dir = make_sub_dir(nb_dir, "solutions")
+        if nb_path.startswith("tutorials"):
+            # Create subdirectories, if they don't exist
+            student_dir = make_sub_dir(nb_dir, "student")
+            static_dir = make_sub_dir(nb_dir, "static")
+            solutions_dir = make_sub_dir(nb_dir, "solutions")
 
-        # Generate the student version and save it to a subdirectory
-        print(f"Extracting solutions from {nb_path}")
-        processed = extract_solutions(nb, nb_dir, nb_name)
-        student_nb, static_images, solution_snippets = processed
+            # Generate the student version and save it to a subdirectory
+            print(f"Extracting solutions from {nb_path}")
+            processed = extract_solutions(nb, nb_dir, nb_name)
+            student_nb, static_images, solution_snippets = processed
 
-        # Loop through cells and point the colab badge at the student version
-        for cell in student_nb.get("cells", []):
-            if has_colab_badge(cell):
-                redirect_colab_badge_to_student_version(cell)
+            # Loop through cells and point the colab badge at the student version
+            for cell in student_nb.get("cells", []):
+                if has_colab_badge(cell):
+                    redirect_colab_badge_to_student_version(cell)
 
-        # Write the student version of the notebook
-        student_nb_path = os.path.join(student_dir, nb_fname)
-        print(f"Writing student notebook to {student_nb_path}")
-        with open(student_nb_path, "w") as f:
-            clean_student_nb = clean_notebook(student_nb)
-            nbformat.write(clean_student_nb, f)
+            # Write the student version of the notebook
+            student_nb_path = os.path.join(student_dir, nb_fname)
+            print(f"Writing student notebook to {student_nb_path}")
+            with open(student_nb_path, "w") as f:
+                clean_student_nb = clean_notebook(student_nb)
+                nbformat.write(clean_student_nb, f)
 
-        # Write the images extracted from the solution cells
-        print(f"Writing solution images to {static_dir}")
-        for fname, image in static_images.items():
-            fname = fname.replace("static", static_dir)
-            image.save(fname)
+            # Write the images extracted from the solution cells
+            print(f"Writing solution images to {static_dir}")
+            for fname, image in static_images.items():
+                fname = fname.replace("static", static_dir)
+                image.save(fname)
 
-        # Write the solution snippets
-        print(f"Writing solution snippets to {solutions_dir}")
-        for fname, snippet in solution_snippets.items():
-            fname = fname.replace("solutions", solutions_dir)
-            with open(fname, "w") as f:
-                f.write(snippet)
-
-    # Further filter the projects to run post-processing only on projects notebooks
-    projects = {
-        nb_path: nb
-        for nb_path, nb in notebooks.items()
-        if nb_path.startswith("projects")
-    }
-
-    # Post-process projects notebooks
-    for nb_path, nb in projects.items():
-
-        # Extract components of the notebook path
-        nb_dir, nb_fname = os.path.split(nb_path)
-        nb_name, _ = os.path.splitext(nb_fname)
-
-        # Loop through the cells and fix any Colab badges we encounter
-        for cell in nb.get("cells", []):
-            if has_colab_badge(cell):
-                redirect_colab_badge_to_main_branch(cell)
-
-        # Ensure that Colab metadata dict exists and enforce some settings
-        add_colab_metadata(nb, nb_name)
-
-        # Clean the original notebook and save it to disk
-        print(f"Writing complete notebook to {nb_path}")
-        with open(nb_path, "w") as f:
-            nb_clean = clean_notebook(nb, flag='projects')
-            nbformat.write(nb_clean, f)
+            # Write the solution snippets
+            print(f"Writing solution snippets to {solutions_dir}")
+            for fname, snippet in solution_snippets.items():
+                fname = fname.replace("solutions", solutions_dir)
+                with open(fname, "w") as f:
+                    f.write(snippet)
 
     exit(errors)
 
