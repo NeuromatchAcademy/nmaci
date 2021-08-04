@@ -140,9 +140,10 @@ def main(arglist):
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
             if nb_path.startswith("tutorials"):
-                nb_clean = clean_notebook(nb)
+               flag = True
             elif nb_path.startswith("projects"):
-                nb_clean = clean_notebook(nb, flag='projects')
+               flag = False
+            nb_clean = clean_notebook(nb, flag)
             
             nbformat.write(nb_clean, f)
 
@@ -302,7 +303,7 @@ def extract_solutions(nb, nb_dir, nb_name):
     return nb, static_images, solution_snippets
 
 
-def clean_notebook(nb, flag='tutorials'):
+def clean_notebook(nb, flag):
     """Remove cell outputs and most unimportant metadata."""
     # Always operate on a copy of the input notebook
     nb = deepcopy(nb)
@@ -340,7 +341,7 @@ def clean_notebook(nb, flag='tutorials'):
 
         if cell["cell_type"] == "code":
             
-            if flag == 'tutorials':
+            if flag:
                 # Remove code cell outputs only in tutorials
                 cell["outputs"] = []
 
