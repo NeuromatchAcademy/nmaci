@@ -124,7 +124,7 @@ def main():
 
     for key in toc.keys():
         # Add wrap-up if it exists
-        wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
+        wrapup_name = f'tutorials/Category_WrapUps/{key.replace(" ", "")}.ipynb'
         if os.path.exists(wrapup_name):
             toc[key]['chapters'].append({'file': wrapup_name})
 
