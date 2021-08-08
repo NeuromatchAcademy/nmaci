@@ -136,15 +136,10 @@ def main(arglist):
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
 
-        # Clean the original notebook and save it to disk
+        # Clean the original notebook and save it to disk if it belongs to tutorials
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
-            if nb_path.startswith("tutorials"):
-               flag = True
-            elif nb_path.startswith("projects"):
-               flag = False
-            nb_clean = clean_notebook(nb, flag)
-            
+            nb_clean = clean_notebook(nb, clear_outputs=nb_path.startswith("tutorials"))
             nbformat.write(nb_clean, f)
 
         if nb_path.startswith("tutorials"):
@@ -303,7 +298,7 @@ def extract_solutions(nb, nb_dir, nb_name):
     return nb, static_images, solution_snippets
 
 
-def clean_notebook(nb, flag):
+def clean_notebook(nb, clear_outputs):
     """Remove cell outputs and most unimportant metadata."""
     # Always operate on a copy of the input notebook
     nb = deepcopy(nb)
@@ -340,9 +335,8 @@ def clean_notebook(nb, flag):
                 cell["metadata"].pop("id")
 
         if cell["cell_type"] == "code":
-            
-            if flag:
-                # Remove code cell outputs only in tutorials
+            # Remove code cell outputs only in notebooks under tutorials
+            if clear_outputs:
                 cell["outputs"] = []
 
             # Ensure that form cells are hidden by default
