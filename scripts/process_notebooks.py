@@ -142,41 +142,44 @@ def main(arglist):
             nb_clean = clean_notebook(nb, clear_outputs=nb_path.startswith("tutorials"))
             nbformat.write(nb_clean, f)
 
-        if nb_path.startswith("tutorials"):
-            # Create subdirectories, if they don't exist
-            student_dir = make_sub_dir(nb_dir, "student")
-            static_dir = make_sub_dir(nb_dir, "static")
-            solutions_dir = make_sub_dir(nb_dir, "solutions")
+        # if the notebook is not in tutorials, skip the creation/update of the student, static, solutions directories
+        if not nb_path.startswith("tutorials"):
+          continue
+        
+        # Create subdirectories, if they don't exist
+        student_dir = make_sub_dir(nb_dir, "student")
+        static_dir = make_sub_dir(nb_dir, "static")
+        solutions_dir = make_sub_dir(nb_dir, "solutions")
 
-            # Generate the student version and save it to a subdirectory
-            print(f"Extracting solutions from {nb_path}")
-            processed = extract_solutions(nb, nb_dir, nb_name)
-            student_nb, static_images, solution_snippets = processed
+        # Generate the student version and save it to a subdirectory
+        print(f"Extracting solutions from {nb_path}")
+        processed = extract_solutions(nb, nb_dir, nb_name)
+        student_nb, static_images, solution_snippets = processed
 
-            # Loop through cells and point the colab badge at the student version
-            for cell in student_nb.get("cells", []):
-                if has_colab_badge(cell):
-                    redirect_colab_badge_to_student_version(cell)
+        # Loop through cells and point the colab badge at the student version
+        for cell in student_nb.get("cells", []):
+            if has_colab_badge(cell):
+                redirect_colab_badge_to_student_version(cell)
 
-            # Write the student version of the notebook
-            student_nb_path = os.path.join(student_dir, nb_fname)
-            print(f"Writing student notebook to {student_nb_path}")
-            with open(student_nb_path, "w") as f:
-                clean_student_nb = clean_notebook(student_nb)
-                nbformat.write(clean_student_nb, f)
+        # Write the student version of the notebook
+        student_nb_path = os.path.join(student_dir, nb_fname)
+        print(f"Writing student notebook to {student_nb_path}")
+        with open(student_nb_path, "w") as f:
+            clean_student_nb = clean_notebook(student_nb)
+            nbformat.write(clean_student_nb, f)
 
-            # Write the images extracted from the solution cells
-            print(f"Writing solution images to {static_dir}")
-            for fname, image in static_images.items():
-                fname = fname.replace("static", static_dir)
-                image.save(fname)
+        # Write the images extracted from the solution cells
+        print(f"Writing solution images to {static_dir}")
+        for fname, image in static_images.items():
+            fname = fname.replace("static", static_dir)
+            image.save(fname)
 
-            # Write the solution snippets
-            print(f"Writing solution snippets to {solutions_dir}")
-            for fname, snippet in solution_snippets.items():
-                fname = fname.replace("solutions", solutions_dir)
-                with open(fname, "w") as f:
-                    f.write(snippet)
+        # Write the solution snippets
+        print(f"Writing solution snippets to {solutions_dir}")
+        for fname, snippet in solution_snippets.items():
+            fname = fname.replace("solutions", solutions_dir)
+            with open(fname, "w") as f:
+                f.write(snippet)
 
     exit(errors)
 
