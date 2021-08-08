@@ -338,7 +338,7 @@ def clean_notebook(nb, clear_outputs):
                 cell["metadata"].pop("id")
 
         if cell["cell_type"] == "code":
-            # Remove code cell outputs only in notebooks under tutorials
+            # Remove code cell outputs if requested
             if clear_outputs:
                 cell["outputs"] = []
 
