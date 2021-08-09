@@ -136,7 +136,7 @@ def main(arglist):
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
 
-        # Clean the original notebook and save it to disk if it belongs to tutorials
+         # Write the original notebook back to disk, clearing outputs only for tutorials
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
             nb_clean = clean_notebook(nb, clear_outputs=nb_path.startswith("tutorials"))
