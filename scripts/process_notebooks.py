@@ -114,15 +114,8 @@ def main(arglist):
     if errors or args.check_only:
         exit(errors)
 
-    # Further filter the notebooks to run post-processing only on tutorials and projects
-    tuts_projs = {
-        nb_path: nb
-        for nb_path, nb in notebooks.items()
-        if nb_path.startswith("tutorials") or nb_path.startswith("projects")
-    }
-
-    # Post-process notebooks to remove solution code and write both versions
-    for nb_path, nb in tuts_projs.items():
+    # Post-process notebooks
+    for nb_path, nb in notebooks.items():
 
         # Extract components of the notebook path
         nb_dir, nb_fname = os.path.split(nb_path)
@@ -136,7 +129,7 @@ def main(arglist):
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
 
-         # Write the original notebook back to disk, clearing outputs only for tutorials
+        # Write the original notebook back to disk, clearing outputs only for tutorials
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
             nb_clean = clean_notebook(nb, clear_outputs=nb_path.startswith("tutorials"))
