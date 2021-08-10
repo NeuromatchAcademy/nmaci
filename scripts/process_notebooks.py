@@ -114,15 +114,8 @@ def main(arglist):
     if errors or args.check_only:
         exit(errors)
 
-    # Further filter the notebooks to run post-processing only on tutorials
-    tutorials = {
-        nb_path: nb
-        for nb_path, nb in notebooks.items()
-        if nb_path.startswith("tutorials")
-    }
-
-    # Post-process notebooks to remove solution code and write both versions
-    for nb_path, nb in tutorials.items():
+    # Post-process notebooks
+    for nb_path, nb in notebooks.items():
 
         # Extract components of the notebook path
         nb_dir, nb_fname = os.path.split(nb_path)
@@ -132,16 +125,22 @@ def main(arglist):
         for cell in nb.get("cells", []):
             if has_colab_badge(cell):
                 redirect_colab_badge_to_main_branch(cell)
+                # add kaggle badge
+                add_kaggle_badge(cell)
 
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
 
-        # Clean the original notebook and save it to disk
+        # Write the original notebook back to disk, clearing outputs only for tutorials
         print(f"Writing complete notebook to {nb_path}")
         with open(nb_path, "w") as f:
-            nb_clean = clean_notebook(nb)
+            nb_clean = clean_notebook(nb, clear_outputs=nb_path.startswith("tutorials"))
             nbformat.write(nb_clean, f)
 
+        # if the notebook is not in tutorials, skip the creation/update of the student, static, solutions directories
+        if not nb_path.startswith("tutorials"):
+          continue
+        
         # Create subdirectories, if they don't exist
         student_dir = make_sub_dir(nb_dir, "student")
         static_dir = make_sub_dir(nb_dir, "static")
@@ -156,6 +155,8 @@ def main(arglist):
         for cell in student_nb.get("cells", []):
             if has_colab_badge(cell):
                 redirect_colab_badge_to_student_version(cell)
+                # add kaggle badge
+                add_kaggle_badge(cell)
 
         # Write the student version of the notebook
         student_nb_path = os.path.join(student_dir, nb_fname)
@@ -176,34 +177,6 @@ def main(arglist):
             fname = fname.replace("solutions", solutions_dir)
             with open(fname, "w") as f:
                 f.write(snippet)
-
-    # Further filter the projects to run post-processing only on projects notebooks
-    projects = {
-        nb_path: nb
-        for nb_path, nb in notebooks.items()
-        if nb_path.startswith("projects")
-    }
-
-    # Post-process projects notebooks
-    for nb_path, nb in projects.items():
-
-        # Extract components of the notebook path
-        nb_dir, nb_fname = os.path.split(nb_path)
-        nb_name, _ = os.path.splitext(nb_fname)
-
-        # Loop through the cells and fix any Colab badges we encounter
-        for cell in nb.get("cells", []):
-            if has_colab_badge(cell):
-                redirect_colab_badge_to_main_branch(cell)
-
-        # Ensure that Colab metadata dict exists and enforce some settings
-        add_colab_metadata(nb, nb_name)
-
-        # Clean the original notebook and save it to disk
-        print(f"Writing complete notebook to {nb_path}")
-        with open(nb_path, "w") as f:
-            nb_clean = clean_notebook(nb)
-            nbformat.write(nb_clean, f)
 
     exit(errors)
 
@@ -325,7 +298,7 @@ def extract_solutions(nb, nb_dir, nb_name):
     return nb, static_images, solution_snippets
 
 
-def clean_notebook(nb):
+def clean_notebook(nb, clear_outputs=True):
     """Remove cell outputs and most unimportant metadata."""
     # Always operate on a copy of the input notebook
     nb = deepcopy(nb)
@@ -362,9 +335,9 @@ def clean_notebook(nb):
                 cell["metadata"].pop("id")
 
         if cell["cell_type"] == "code":
-
-            # Remove code cell outputs
-            cell["outputs"] = []
+            # Remove code cell outputs if requested
+            if clear_outputs:
+                cell["outputs"] = []
 
             # Ensure that form cells are hidden by default
             first_line, *_ = cell["source"].splitlines()
@@ -505,7 +478,18 @@ def test_redirect_colab_badge_to_student_version():
 
     assert cell["source"] == expected
 
-
+def add_kaggle_badge(cell):
+    """Add a kaggle badge if not exists."""
+    cell_text = cell["source"]
+    if "kaggle" not in cell_text:
+        badge_link = "https://kaggle.com/static/images/open-in-kaggle.svg"
+        service = "https://kaggle.com/kernels/welcome?src="
+        local_path = re.findall(r'(tutorials.+?\.ipynb)', cell_text)[0]
+        alter = "Open in Kaggle"
+        basic_url = "https://raw.githubusercontent.com/NeuromatchAcademy"
+        a = f'"<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{local_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>"'
+        cell["source"] += f', {a}'
+ 
 def sequentially_executed(nb):
     """Return True if notebook appears freshly executed from top-to-bottom."""
     exec_counts = [
