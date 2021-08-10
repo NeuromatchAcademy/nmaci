@@ -298,7 +298,7 @@ def extract_solutions(nb, nb_dir, nb_name):
     return nb, static_images, solution_snippets
 
 
-def clean_notebook(nb, clear_outputs):
+def clean_notebook(nb, clear_outputs=True):
     """Remove cell outputs and most unimportant metadata."""
     # Always operate on a copy of the input notebook
     nb = deepcopy(nb)
