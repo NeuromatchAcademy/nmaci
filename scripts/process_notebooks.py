@@ -126,7 +126,7 @@ def main(arglist):
             if has_colab_badge(cell):
                 redirect_colab_badge_to_main_branch(cell)
                 # add kaggle badge
-                add_kaggle_badge(cell)
+                cell = add_kaggle_badge(cell)
 
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
@@ -489,6 +489,7 @@ def add_kaggle_badge(cell):
         basic_url = "https://raw.githubusercontent.com/NeuromatchAcademy"
         a = f'"<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{local_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>"'
         cell = {"source": [cell_text, a]}
+        return cell
  
 def sequentially_executed(nb):
     """Return True if notebook appears freshly executed from top-to-bottom."""
