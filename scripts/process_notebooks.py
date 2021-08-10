@@ -481,12 +481,14 @@ def test_redirect_colab_badge_to_student_version():
 def add_kaggle_badge(cell):
     """Add a kaggle badge if not exists."""
     cell_text = cell["source"]
-    if "Kaggle" not in cell_text:
+    if "kaggle" not in cell_text:
         badge_link = "https://kaggle.com/static/images/open-in-kaggle.svg"
         service = "https://kaggle.com/kernels/welcome?src="
         local_path = re.findall(r'(tutorials.+?\.ipynb)', cell_text)[0]
-        a = f'"<a href=\"{service}https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/{MAIN_BRANCH}/{local_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"Open in Kaggle\"/></a>"'
-        cell["source"] = cell_text, a
+        alter = "Open in Kaggle"
+        basic_url = "https://raw.githubusercontent.com/NeuromatchAcademy"
+        a = f'"<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{local_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>"'
+        cell = {"source": [cell_text, a]}
  
 def sequentially_executed(nb):
     """Return True if notebook appears freshly executed from top-to-bottom."""
