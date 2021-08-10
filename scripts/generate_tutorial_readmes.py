@@ -170,8 +170,8 @@ def write_badge_table(notebooks):
 
     # Add the table header
     table_text = [
-        "|   | Run | View |",
-        "| - | --- | ---- |",
+        "|   | Run | Run | View |",
+        "| - | --- | --- | ---- |",
     ]
 
     # Get ordered list of file names
@@ -188,9 +188,10 @@ def write_badge_table(notebooks):
         if 'Tutorial' in notebook_name:
             notebook_name = f"Tutorial {notebook_name.split('Tutorial')[1]}"
         colab_badge = make_colab_badge(local_path)
+        kaggle_badge = make_kaggle_badge(local_path)
         nbviewer_badge = make_nbviewer_badge(local_path)
         table_text.append(
-            f"| {notebook_name} | {colab_badge} | {nbviewer_badge} |"
+            f"| {notebook_name} | {colab_badge} | {kaggle_badge} | {nbviewer_badge} |"
         )
     table_text.append("\n")
 
@@ -214,7 +215,17 @@ def make_colab_badge(local_path):
     alt_text = "Open In Colab"
     badge_svg = "https://colab.research.google.com/assets/colab-badge.svg"
     service = "https://colab.research.google.com"
-    return make_badge(alt_text, badge_svg, service, local_path)
+    url_base = f"{service}/github/NeuromatchAcademy/{REPO}/blob/{MAIN_BRANCH}"
+    return make_badge(alt_text, badge_svg, service, local_path, url_base)
+
+
+def make_kaggle_badge(local_path):
+    """Generate a kaggle badge for a notebook on github."""
+    alt_text = "Open In kaggle"
+    badge_svg = "https://kaggle.com/static/images/open-in-kaggle.svg"
+    service = "https://kaggle.com/kernels/welcome?src="
+    url_base = f"{service}https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/{MAIN_BRANCH}"
+    return make_badge(alt_text, badge_svg, service, local_path, url_base)
 
 
 def make_nbviewer_badge(local_path):
@@ -222,12 +233,12 @@ def make_nbviewer_badge(local_path):
     alt_text = "View the notebook"
     badge_svg = "https://img.shields.io/badge/render-nbviewer-orange.svg"
     service = "https://nbviewer.jupyter.org"
-    return make_badge(alt_text, badge_svg, service, f"{local_path}?flush_cache=true")
-
-
-def make_badge(alt_text, badge_svg, service, local_path):
-    """Generate a markdown element for a badge image that links to a file."""
     url_base = f"{service}/github/NeuromatchAcademy/{REPO}/blob/{MAIN_BRANCH}"
+    return make_badge(alt_text, badge_svg, service, f"{local_path}?flush_cache=true", url_base)
+
+
+def make_badge(alt_text, badge_svg, service, local_path, url_base):
+    """Generate a markdown element for a badge image that links to a file."""
     return f"[![{alt_text}]({badge_svg})]({url_base}/{local_path})"
 
 
