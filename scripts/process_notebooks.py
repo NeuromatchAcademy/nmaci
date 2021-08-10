@@ -481,12 +481,12 @@ def test_redirect_colab_badge_to_student_version():
 def add_kaggle_badge(cell):
     """Add a kaggle badge if not exists."""
     cell_text = cell["source"]
-    if len(cell_text) == 1:
+    if "Kaggle" not in cell_text:
         badge_link = "https://kaggle.com/static/images/open-in-kaggle.svg"
         service = "https://kaggle.com/kernels/welcome?src="
         local_path = re.findall(r'(tutorials.+?\.ipynb)', cell_text)[0]
         a = f"[![Kaggle]({badge_link})]({service}https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/{MAIN_BRANCH}/{local_path})"
-        cell_text.append(a)
+        cell["source"] += f",{a}"
     
 def sequentially_executed(nb):
     """Return True if notebook appears freshly executed from top-to-bottom."""
