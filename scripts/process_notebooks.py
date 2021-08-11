@@ -488,7 +488,7 @@ def add_kaggle_badge(cell):
         alter = "Open in Kaggle"
         basic_url = "https://raw.githubusercontent.com/NeuromatchAcademy"
         a = f'<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{local_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>'
-        cell["source"] += f' <br> {a}'
+        cell["source"] += f' &nbsp; {a}'
  
 def sequentially_executed(nb):
     """Return True if notebook appears freshly executed from top-to-bottom."""
