@@ -455,6 +455,10 @@ def test_redirect_colab_badge_to_main_branch():
 def redirect_colab_badge_to_student_version(cell):
     """Modify the Colab badge to point at student version of the notebook."""
     cell_text = cell["source"]
+    # redirect the colab badge
+    p = re.compile(r"(^.+blob/" + MAIN_BRANCH + r"/tutorials/W\dD\d\w+)/(\w+\.ipynb.+)")
+    cell_text = p.sub(r"\1/student/\2", cell_text)
+    # redirect the kaggle badge
     p = re.compile(r"(^.+/tutorials/W\dD\d\w+)/(\w+\.ipynb.+)")
     cell["source"] = p.sub(r"\1/student/\2", cell_text)
 
