@@ -50,8 +50,8 @@ def make_lint_report(nb_fpath):
     return res.stdout.decode()
 
 
-def make_colab_badge_table(branch, notebooks, nb_fpath):
-    """Add Colab badges for the branch version of each notebook."""
+def make_colab_kaggle_badge_table(branch, notebooks):
+    """Add Colab and Kaggle badges for the branch version of each notebook."""
     header = [""]
     divider = ["-"]
     instructor = ["Instructor"]
