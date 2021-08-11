@@ -126,7 +126,7 @@ def main(arglist):
             if has_colab_badge(cell):
                 redirect_colab_badge_to_main_branch(cell)
                 # add kaggle badge
-                add_kaggle_badge(cell, notebook_dir=nb_path.startswith("tutorials"))
+                add_kaggle_badge(cell, nb_path)
 
         # Ensure that Colab metadata dict exists and enforce some settings
         add_colab_metadata(nb, nb_name)
@@ -156,7 +156,7 @@ def main(arglist):
             if has_colab_badge(cell):
                 redirect_colab_badge_to_student_version(cell)
                 # add kaggle badge
-                add_kaggle_badge(cell)
+                add_kaggle_badge(cell, nb_path)
 
         # Write the student version of the notebook
         student_nb_path = os.path.join(student_dir, nb_fname)
@@ -482,20 +482,15 @@ def test_redirect_colab_badge_to_student_version():
 
     assert cell["source"] == expected
 
-def add_kaggle_badge(cell, notebook_dir=True):
+def add_kaggle_badge(cell, nb_path):
     """Add a kaggle badge if not exists."""
     cell_text = cell["source"]
     if "kaggle" not in cell_text:
         badge_link = "https://kaggle.com/static/images/open-in-kaggle.svg"
         service = "https://kaggle.com/kernels/welcome?src="
-        # check if the notebook belongs to tutorials or projects directory
-        if notebook_dir:
-          local_path = re.findall(r'(tutorials.+?\.ipynb)', cell_text)[0]
-        else:
-          local_path = re.findall(r'(projects.+?\.ipynb)', cell_text)[0]
         alter = "Open in Kaggle"
         basic_url = "https://raw.githubusercontent.com/NeuromatchAcademy"
-        a = f'<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{local_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>'
+        a = f'<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{nb_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>'
         cell["source"] += f' &nbsp; {a}'
  
 def sequentially_executed(nb):
