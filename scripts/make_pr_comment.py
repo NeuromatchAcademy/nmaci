@@ -86,19 +86,6 @@ def make_colab_badge(branch, nb_dir, nb_fname, student=False):
     )
     return f"[![{alt_text}]({badge_svg})]({url})"
 
-# to be used
-def make_kaggle_badge(branch, nb_dir, nb_fname, student=False):
-    """Generate a Kaggle badge for a notebook on github."""
-    badge_svg = "https://kaggle.com/static/images/open-in-kaggle.svg"
-    if student:
-        nb_dir = os.path.join(nb_dir, "student")
-    url = (
-        "https://kaggle.com/kernels/welcome?src="
-        f"https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/"
-        f"{branch}/{nb_dir}/{nb_fname}"
-    )
-    return f"[![Kaggle]({badge_svg})]({url})"
-
 
 def parse_args(arglist):
 
