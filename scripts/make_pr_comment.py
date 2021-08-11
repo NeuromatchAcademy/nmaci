@@ -50,7 +50,7 @@ def make_lint_report(nb_fpath):
     return res.stdout.decode()
 
 
-def make_colab_badge_table(branch, notebooks):
+def make_colab_badge_table(branch, notebooks, nb_fpath):
     """Add Colab badges for the branch version of each notebook."""
     header = [""]
     divider = ["-"]
@@ -62,7 +62,10 @@ def make_colab_badge_table(branch, notebooks):
         nb_name, _ = os.path.splitext(nb_fname)
         header.append(nb_name)
         instructor.append(make_colab_badge(branch, nb_dir, nb_fname))
-        student.append(make_colab_badge(branch, nb_dir, nb_fname, student=True))
+        instructor.append(make_kaggle_badge(branch, nb_dir, nb_fname))
+        if nb_dir == "tutorials":
+            student.append(make_colab_badge(branch, nb_dir, nb_fname, student=True))
+            student.append(make_kaggle_badge(branch, nb_dir, nb_fname, student=True))
         divider.append("-")
 
     rows = header, divider, instructor, student
@@ -84,6 +87,19 @@ def make_colab_badge(branch, nb_dir, nb_fname, student=False):
         f"{branch}/{nb_dir}/{nb_fname}"
     )
     return f"[![{alt_text}]({badge_svg})]({url})"
+
+
+def make_kaggle_badge(branch, nb_dir, nb_fname, student=False):
+    """Generate a Kaggle badge for a notebook on github."""
+    badge_svg = "https://kaggle.com/static/images/open-in-kaggle.svg"
+    if student:
+        nb_dir = os.path.join(nb_dir, "student")
+    url = (
+        "https://kaggle.com/kernels/welcome?src="
+        f"https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/"
+        f"{branch}/{nb_dir}/{nb_fname}"
+    )
+    return f"[![Kaggle]({badge_svg})]({url})"
 
 
 def parse_args(arglist):
