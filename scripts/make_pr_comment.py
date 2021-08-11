@@ -50,8 +50,8 @@ def make_lint_report(nb_fpath):
     return res.stdout.decode()
 
 
-def make_colab_kaggle_badge_table(branch, notebooks):
-    """Add Colab and Kaggle badges for the branch version of each notebook."""
+def make_colab_badge_table(branch, notebooks):
+    """Add Colab badges for the branch version of each notebook."""
     header = [""]
     divider = ["-"]
     instructor = ["Instructor"]
@@ -62,10 +62,8 @@ def make_colab_kaggle_badge_table(branch, notebooks):
         nb_name, _ = os.path.splitext(nb_fname)
         header.append(nb_name)
         instructor.append(make_colab_badge(branch, nb_dir, nb_fname))
-        instructor.append(make_kaggle_badge(branch, nb_dir, nb_fname))
         if nb_dir == "tutorials":
             student.append(make_colab_badge(branch, nb_dir, nb_fname, student=True))
-            student.append(make_kaggle_badge(branch, nb_dir, nb_fname, student=True))
         divider.append("-")
 
     rows = header, divider, instructor, student
@@ -88,7 +86,7 @@ def make_colab_badge(branch, nb_dir, nb_fname, student=False):
     )
     return f"[![{alt_text}]({badge_svg})]({url})"
 
-
+# to be used
 def make_kaggle_badge(branch, nb_dir, nb_fname, student=False):
     """Generate a Kaggle badge for a notebook on github."""
     badge_svg = "https://kaggle.com/static/images/open-in-kaggle.svg"
