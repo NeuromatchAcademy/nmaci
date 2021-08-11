@@ -17,7 +17,7 @@ def main(arglist):
 
     # Start with a table of badges for the branch versions of the notebooks
     comment_lines = [
-        make_colab_badge_table(args.branch, args.notebooks),
+        make_colab_kaggle_badge_table(args.branch, args.notebooks),
     ]
 
     # Add a code report (under a details tag) for each notebook
