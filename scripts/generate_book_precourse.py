@@ -6,7 +6,7 @@ import traceback
 import json
 from bs4 import BeautifulSoup
 
-REPO = os.environ.get("NMA_REPO", "course-content-dl")
+REPO = os.environ.get("NMA_REPO", "precourse")
 
 def main():
     with open('tutorials/materials.yml') as fh:
@@ -17,6 +17,10 @@ def main():
     for m in materials:
         if m['category'] not in toc.keys():
             toc[m['category']] = {'part': m['category'], 'chapters': []}
+    # Add the project booklet
+    toc['Project Booklet'] = {'part': 'Project Booklet', 'chapters': []}
+
+    art_file_list = os.listdir('tutorials/Art/')
 
     art_file_list = os.listdir('tutorials/Art/')
 
@@ -43,7 +47,9 @@ def main():
 
         # Make list of notebook sections
         notebook_list = []
+        notebook_list += [f"{directory}/{m['day']}_Intro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Intro.ipynb") else []
         notebook_list += [f"{directory}/student/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
+        notebook_list += [f"{directory}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
 
         # Add and process all notebooks
         for notebook_file_path in notebook_list:
@@ -76,6 +82,14 @@ def main():
                                           {'file': 'tutorials/TechnicalHelp/Discord.md'}
                                          ]}]}
     toc_list += [chapter]
+    for key in toc.keys():
+        
+        # Add wrap-up if it exists
+        wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
+        if os.path.exists(wrapup_name):
+            toc[key]['chapters'].append({'file': wrapup_name})
+        
+        toc_list.append(toc[key])
 
     with open('book/_toc.yml', 'w') as fh:
         yaml.dump(toc_list, fh)
@@ -159,7 +173,6 @@ def link_hidden_cells(content):
     content['cells'] = updated_cells
     return content
 
-
 def change_video_widths(content):
 
     for cell in content['cells']:
@@ -171,8 +184,7 @@ def change_video_widths(content):
                 cell['source'][ind] = cell['source'][ind].replace('480', '410')
 
         # Put slides in ipywidget so they don't overlap margin
-        # cell that contains 'IFrame' and 'Tutorial slides' to avoid issues with irrelevant cells.
-        if len(cell['source']) > 1 and 'IFrame' in cell['source'][1] and 'Tutorial slides' in cell['source'][1]:
+        if len(cell['source']) > 1 and 'IFrame' in cell['source'][1]:
             slide_link = ''.join(cell['source']).split('"')[1].split(", width")[0][:-1]
             cell['source'] = ['# @markdown\n',
                               'from IPython.display import IFrame\n',
@@ -184,4 +196,3 @@ def change_video_widths(content):
 
 if __name__ == '__main__':
     main()
- 
