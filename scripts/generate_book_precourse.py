@@ -17,8 +17,6 @@ def main():
     for m in materials:
         if m['category'] not in toc.keys():
             toc[m['category']] = {'part': m['category'], 'chapters': []}
-    # Add the project booklet
-    toc['Project Booklet'] = {'part': 'Project Booklet', 'chapters': []}
 
     art_file_list = os.listdir('tutorials/Art/')
 
