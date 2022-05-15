@@ -140,21 +140,31 @@ def main(arglist):
         # if the notebook is not in tutorials, skip the creation/update of the student, static, solutions directories
         if not nb_path.startswith("tutorials"):
           continue
-        
+
         # Create subdirectories, if they don't exist
         student_dir = make_sub_dir(nb_dir, "student")
         static_dir = make_sub_dir(nb_dir, "static")
         solutions_dir = make_sub_dir(nb_dir, "solutions")
+        instructor_dir = make_sub_dir(nb_dir, "instructor")
 
         # Generate the student version and save it to a subdirectory
         print(f"Extracting solutions from {nb_path}")
         processed = extract_solutions(nb, nb_dir, nb_name)
         student_nb, static_images, solution_snippets = processed
+        print(f"Create instructor notebook from {nb_path}")
+        instructor_nb = instructor_version(nb, nb_dir, nb_name)
 
         # Loop through cells and point the colab badge at the student version
         for cell in student_nb.get("cells", []):
             if has_colab_badge(cell):
                 redirect_colab_badge_to_student_version(cell)
+                # add kaggle badge
+                add_kaggle_badge(cell, nb_path)
+
+        # Loop through cells and point the colab badge at the instructor version
+        for cell in instructor_nb.get("cells", []):
+            if has_colab_badge(cell):
+                redirect_colab_badge_to_instructor_version(cell)
                 # add kaggle badge
                 add_kaggle_badge(cell, nb_path)
 
@@ -177,6 +187,13 @@ def main(arglist):
             fname = fname.replace("solutions", solutions_dir)
             with open(fname, "w") as f:
                 f.write(snippet)
+
+        # Write the instructor version of the notebook
+        instructor_nb_path = os.path.join(instructor_dir, nb_fname)
+        print(f"Writing instructor notebook to {instructor_nb_path}")
+        with open(instructor_nb_path, "w") as f:
+            clean_instructor_nb = clean_notebook(instructor_nb)
+            nbformat.write(clean_instructor_nb, f)
 
     exit(errors)
 
@@ -298,6 +315,31 @@ def extract_solutions(nb, nb_dir, nb_name):
     return nb, static_images, solution_snippets
 
 
+def instructor_version(nb, nb_dir, nb_name):
+    """Convert notebook to instructor notebook."""
+    nb = deepcopy(nb)
+    _, tutorial_dir = os.path.split(nb_dir)
+
+    nb_cells = nb.get("cells", [])
+    for i, cell in enumerate(nb_cells):
+
+        if has_code_exercise(cell):
+            print(i)
+
+            nb_cells[i-1]["cell_type"] = "markdown"
+            nb_cells[i-1]["metadata"]["colab_type"] = "text"
+            if "outputID" in nb_cells[i-1]["metadata"]:
+                del nb_cells[i-1]["metadata"]["outputId"]
+            if "outputs" in nb_cells[i-1]:
+                del nb_cells[i-1]["outputs"]
+            if "execution_count" in nb_cells[i-1]:
+                del nb_cells[i-1]["execution_count"]
+
+            nb_cells[i-1]['source'] = '```python\n\n' + nb_cells[i-1]['source']+'\n\n```'
+
+    return nb
+
+
 def clean_notebook(nb, clear_outputs=True):
     """Remove cell outputs and most unimportant metadata."""
     # Always operate on a copy of the input notebook
@@ -395,6 +437,16 @@ def has_solution(cell):
     )
 
 
+def has_code_exercise(cell):
+    """Return True if cell is marked as containing an exercise solution."""
+    cell_text = cell["source"].replace(" ", "").lower()
+    first_line = cell_text.split("\n")[0]
+    return (
+        cell_text.startswith("#@titlesolution")
+        or "to_removesolution" in first_line
+    )
+
+
 def test_has_solution():
 
     cell = {"source": "# solution"}
@@ -463,6 +515,17 @@ def redirect_colab_badge_to_student_version(cell):
     cell["source"] = p.sub(r"\1/student/\2", cell_text)
 
 
+def redirect_colab_badge_to_instructor_version(cell):
+    """Modify the Colab badge to point at instructor version of the notebook."""
+    cell_text = cell["source"]
+    # redirect the colab badge
+    p = re.compile(r"(^.+blob/" + MAIN_BRANCH + r"/tutorials/W\dD\d\w+)/(\w+\.ipynb.+)")
+    cell_text = p.sub(r"\1/instructor/\2", cell_text)
+    # redirect the kaggle badge
+    p = re.compile(r"(^.+/tutorials/W\dD\d\w+)/(\w+\.ipynb.+)")
+    cell["source"] = p.sub(r"\1/instructor/\2", cell_text)
+
+
 def test_redirect_colab_badge_to_student_version():
 
     original = (
@@ -492,7 +555,7 @@ def add_kaggle_badge(cell, nb_path):
         basic_url = "https://raw.githubusercontent.com/NeuromatchAcademy"
         a = f'<a href=\"{service}{basic_url}/{REPO}/{MAIN_BRANCH}/{nb_path}\" target=\"_parent\"><img src=\"{badge_link}\" alt=\"{alter}\"/></a>'
         cell["source"] += f' &nbsp; {a}'
- 
+
 def sequentially_executed(nb):
     """Return True if notebook appears freshly executed from top-to-bottom."""
     exec_counts = [
