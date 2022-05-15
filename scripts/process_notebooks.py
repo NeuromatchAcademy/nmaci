@@ -4,10 +4,11 @@
 - Check that the cells have been executed sequentially on a fresh kernel
 - Strip trailing whitespace from all code lines
 - Either:
-  - Execute the notebook and fail if errors are encountered
+  - Execute the notebook and fail if errors are encountered (apart from the `NotImplementedError`)
   - Check that all code cells have been executed without error
 - Extract solution code and write a .py file with the solution
-- Replace solution cells with a "hint" image and a link to the solution code
+- Create the student version by replacing solution cells with a "hint" image and a link to the solution code
+- Create the instructor version by replacing cells with code exercises with text cells with code in markdown form.
 - Redirect Colab-inserted badges to the main branch
 - Set the Colab notebook name field based on file path
 - Standardize some Colab settings (always have ToC, always hide form cells)
@@ -151,6 +152,8 @@ def main(arglist):
         print(f"Extracting solutions from {nb_path}")
         processed = extract_solutions(nb, nb_dir, nb_name)
         student_nb, static_images, solution_snippets = processed
+        
+        # Generate the instructor version and save it to a subdirectory
         print(f"Create instructor notebook from {nb_path}")
         instructor_nb = instructor_version(nb, nb_dir, nb_name)
 
