@@ -14,6 +14,7 @@ if __name__ == "__main__":
         return all([
             path.endswith(".ipynb"),
             "student/" not in path,
+            "instructor/" not in path,
             os.path.isfile(path),
         ])
 
