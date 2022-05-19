@@ -109,7 +109,7 @@ def main():
             "## Instructor notebooks",
             "",
         ]
-        day_readme_text.extend(write_badge_table(notebooks))
+        day_readme_text.extend(write_badge_table(instructor_notebooks))
 
         day_readme_text.extend([
             "## Student notebooks",
