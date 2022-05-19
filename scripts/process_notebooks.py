@@ -55,6 +55,7 @@ def main(arglist):
         return all([
             path.endswith(".ipynb"),
             "student/" not in path,
+            "instructor/" not in path,
             os.path.isfile(path),
         ])
 
