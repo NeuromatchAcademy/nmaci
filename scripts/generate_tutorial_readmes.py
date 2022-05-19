@@ -63,6 +63,7 @@ def main():
 
         day_anchors[day_code] = "#" + anchor
 
+        instructor_notebooks = get_instructor_links(notebooks)
         student_notebooks = get_student_links(notebooks)
 
         # Write the day information into the course README
@@ -108,7 +109,7 @@ def main():
             "## Instructor notebooks",
             "",
         ]
-        day_readme_text.extend(write_badge_table(notebooks))
+        day_readme_text.extend(write_badge_table(instructor_notebooks))
 
         day_readme_text.extend([
             "## Student notebooks",
@@ -198,15 +199,27 @@ def write_badge_table(notebooks):
     return table_text
 
 
-def get_student_links(instructor_notebooks):
-    """Convert a list of instructor notebook paths to student versions."""
+def get_instructor_links(base_notebooks):
+    """Convert a list of base notebook paths to instructor versions."""
+    instructor_notebooks = []
+    for base_nb in base_notebooks:
+        if 'Tutorial' in base_nb:
+            day_path, nb_fname = os.path.split(base_nb)
+            instructor_notebooks.append(f"{day_path}/instructor/{nb_fname}")
+        else:
+            instructor_notebooks.append(base_nb)
+    return instructor_notebooks
+
+
+def get_student_links(base_notebooks):
+    """Convert a list of base notebook paths to student versions."""
     student_notebooks = []
-    for instructor_nb in instructor_notebooks:
-        if 'Tutorial' in instructor_nb:
-            day_path, nb_fname = os.path.split(instructor_nb)
+    for base_nb in base_notebooks:
+        if 'Tutorial' in base_nb:
+            day_path, nb_fname = os.path.split(base_nb)
             student_notebooks.append(f"{day_path}/student/{nb_fname}")
         else:
-            student_notebooks.append(instructor_nb)
+            student_notebooks.append(base_nb)
     return student_notebooks
 
 
