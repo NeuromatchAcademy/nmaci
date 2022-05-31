@@ -1,5 +1,5 @@
 import os
-
+import sys
 import yaml
 from jinja2 import Template
 import traceback
@@ -7,6 +7,8 @@ import json
 from bs4 import BeautifulSoup
 
 REPO = os.environ.get("NMA_REPO", "course-content")
+ARG = sys.argv[1]
+
 
 def main():
     with open('tutorials/materials.yml') as fh:
@@ -48,7 +50,7 @@ def main():
         # Make list of notebook sections
         notebook_list = []
         notebook_list += [f"{directory}/{m['day']}_Intro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Intro.ipynb") else []
-        notebook_list += [f"{directory}/student/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
+        notebook_list += [f"{directory}/{ARG}/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
         notebook_list += [f"{directory}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
 
         # Add and process all notebooks
