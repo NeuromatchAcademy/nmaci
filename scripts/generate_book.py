@@ -49,9 +49,9 @@ def main():
 
         # Make list of notebook sections
         notebook_list = []
-        notebook_list += [f"{directory}/{m['day']}_Intro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Intro.ipynb") else []
+        notebook_list += [f"{directory}/{ARG}/{m['day']}_Intro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Intro.ipynb") else []
         notebook_list += [f"{directory}/{ARG}/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
-        notebook_list += [f"{directory}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
+        notebook_list += [f"{directory}/{ARG}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
 
         # Add and process all notebooks
         for notebook_file_path in notebook_list:
@@ -118,9 +118,9 @@ def main():
                                                   ]})
 
     # Turn toc into list
-    toc_list = [{'file': 'tutorials/intro.ipynb'}]
-    if os.path.exists("tutorials/intro.ipynb"):
-        pre_process_notebook('tutorials/intro.ipynb')
+    toc_list = [{'file': f"tutorials/{ARG}/intro.ipynb"}]
+    if os.path.exists(f"tutorials/{ARG}/intro.ipynb"):
+        pre_process_notebook(f"tutorials/{ARG}/intro.ipynb")
 
     # Schedule chapter
     chapter = {'chapters': [{'file': 'tutorials/Schedule/schedule_intro.md',
