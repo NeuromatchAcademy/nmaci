@@ -328,18 +328,20 @@ def instructor_version(nb, nb_dir, nb_name):
     for i, cell in enumerate(nb_cells):
 
         if has_code_exercise(cell):
-            print(i)
+            if nb_cells[i-1]["cell_type"] == "markdown":
+                cell_id = i-2
+            else:
+                cell_id = i-1
+            nb_cells[cell_id]["cell_type"] = "markdown"
+            nb_cells[cell_id]["metadata"]["colab_type"] = "text"
+            if "outputID" in nb_cells[cell_id]["metadata"]:
+                del nb_cells[cell_id]["metadata"]["outputId"]
+            if "outputs" in nb_cells[cell_id]:
+                del nb_cells[cell_id]["outputs"]
+            if "execution_count" in nb_cells[cell_id]:
+                del nb_cells[cell_id]["execution_count"]
 
-            nb_cells[i-1]["cell_type"] = "markdown"
-            nb_cells[i-1]["metadata"]["colab_type"] = "text"
-            if "outputID" in nb_cells[i-1]["metadata"]:
-                del nb_cells[i-1]["metadata"]["outputId"]
-            if "outputs" in nb_cells[i-1]:
-                del nb_cells[i-1]["outputs"]
-            if "execution_count" in nb_cells[i-1]:
-                del nb_cells[i-1]["execution_count"]
-
-            nb_cells[i-1]['source'] = '```python\n\n' + nb_cells[i-1]['source']+'\n\n```'
+            nb_cells[cell_id]['source'] = '```python\n\n' + nb_cells[cell_id]['source']+'\n\n```'
 
     return nb
 
