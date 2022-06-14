@@ -341,7 +341,7 @@ def instructor_version(nb, nb_dir, nb_name):
             if "execution_count" in nb_cells[cell_id]:
                 del nb_cells[cell_id]["execution_count"]
 
-            nb_cells[cell_id]['source'] = '```python\n\n' + nb_cells[cell_id]['source']+'\n\n```'
+            nb_cells[cell_id]['source'] = '```python\n' + nb_cells[cell_id]['source']+'\n\n```'
 
     return nb
 
