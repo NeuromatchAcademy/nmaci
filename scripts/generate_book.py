@@ -61,8 +61,11 @@ def main():
         # Add further reading page
         chapter['sections'].append({'file': f"{directory}/further_reading.md"})
 
-        if os.path.exists(f"{directory}/{m['day']}_DaySummary.ipynb"):
-            chapter['sections'].append({'file': f"{directory}/{ARG}/{m['day']}_DaySummary.ipynb"})
+        # Add day summary page
+        notebook_file_path = f"{directory}/{ARG}/{m['day']}_DaySummary.ipynb"}
+        if os.path.exists(notebook_file_path):
+            chapter['sections'].append({'file': notebook_file_path)
+            pre_process_notebook(notebook_file_path)
 
         # Add chapter
         toc[part]['chapters'].append(chapter)
