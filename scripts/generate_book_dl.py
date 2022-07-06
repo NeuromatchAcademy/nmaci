@@ -125,7 +125,8 @@ def main():
     toc_list += [chapter]
     
     # Pre-reqs file
-    toc_list += [{'file': 'prereqs/DeepLearning.md'}]
+    chapter = {'chapters': [{'file': 'prereqs/DeepLearning.md'}]}
+    toc_list += [chapter]
 
     for key in toc.keys():
         # Add wrap-up if it exists
