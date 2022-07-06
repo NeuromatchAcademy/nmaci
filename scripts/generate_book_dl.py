@@ -234,6 +234,7 @@ def change_video_widths(content):
             slide_link = ''.join(cell['source']).split('"')[1].split(", width")[0][:-1]
             cell['source'] = ['# @markdown\n',
                               'from IPython.display import IFrame\n',
+                              'from ipywidgets import widgets\n',
                               'out = widgets.Output()\n',
                               'with out:\n',
                               f'    display(IFrame(src=f"{slide_link}", width=730, height=410))\n',
