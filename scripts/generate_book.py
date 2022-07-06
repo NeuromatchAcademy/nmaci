@@ -64,7 +64,7 @@ def main():
         # Add day summary page
         notebook_file_path = f"{directory}/{ARG}/{m['day']}_DaySummary.ipynb"
         if os.path.exists(notebook_file_path):
-            chapter['sections'].append({'file': notebook_file_path)
+            chapter['sections'].append({'file': notebook_file_path})
             pre_process_notebook(notebook_file_path)
 
         # Add chapter
