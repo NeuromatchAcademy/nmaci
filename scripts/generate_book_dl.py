@@ -124,11 +124,9 @@ def main():
                                          ]}]}
     toc_list += [chapter]
     
-    # Pre-reqs chapter
-    chapter = {'chapters': [{'file': 'prereqs/DeepLearning.md',
-                            'sections': []
-                            }]}
-    toc_list += [chapter]
+    # Pre-reqs file
+    toc_list += [{'file': 'prereqs/DeepLearning.md'}]
+
     for key in toc.keys():
         # Add wrap-up if it exists
         wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
