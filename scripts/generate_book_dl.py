@@ -47,7 +47,7 @@ def main():
         # Make list of notebook sections
         notebook_list = []
         notebook_list += [f"{directory}/{ARG}/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
-        notebook_list += [f"{directory}/{ARG}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
+        notebook_list += [f"{directory}/{ARG}/{m['day']}_BonusLecture.ipynb"] if os.path.exists(f"{directory}/{m['day']}_BonusLecture.ipynb") else []
 
         # Add and process all notebooks
         for notebook_file_path in notebook_list:
