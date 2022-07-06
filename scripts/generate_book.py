@@ -52,7 +52,6 @@ def main():
         notebook_list += [f"{directory}/{ARG}/{m['day']}_Intro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Intro.ipynb") else []
         notebook_list += [f"{directory}/{ARG}/{m['day']}_Tutorial{i + 1}.ipynb" for i in range(m['tutorials'])]
         notebook_list += [f"{directory}/{ARG}/{m['day']}_Outro.ipynb"] if os.path.exists(f"{directory}/{m['day']}_Outro.ipynb") else []
-        notebook_list += [f"{directory}/{ARG}/{m['day']}_DaySummary.ipynb"] if os.path.exists(f"{directory}/{m['day']}_DaySummary.ipynb") else []
 
         # Add and process all notebooks
         for notebook_file_path in notebook_list:
@@ -61,6 +60,9 @@ def main():
 
         # Add further reading page
         chapter['sections'].append({'file': f"{directory}/further_reading.md"})
+
+        if os.path.exists(f"{directory}/{m['day']}_DaySummary.ipynb"):
+            chapter['sections'].append({'file': f"{directory}/{ARG}/{m['day']}_DaySummary.ipynb"})
 
         # Add chapter
         toc[part]['chapters'].append(chapter)
