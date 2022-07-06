@@ -123,7 +123,12 @@ def main():
                                           {'file': 'tutorials/TechnicalHelp/Discord.md'}
                                          ]}]}
     toc_list += [chapter]
-
+    
+    # Pre-reqs chapter
+    chapter = {'chapters': [{'file': 'prereqs/DeepLearning.md',
+                            'sections': []
+                            }]}
+    toc_list += [chapter]
     for key in toc.keys():
         # Add wrap-up if it exists
         wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
