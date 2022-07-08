@@ -63,14 +63,6 @@ def main():
     if os.path.exists("tutorials/intro.ipynb"):
         pre_process_notebook('tutorials/intro.ipynb')
 
-    # Schedule chapter
-    chapter = {'chapters': [{'file': 'tutorials/Schedule/schedule_intro.md',
-                             'sections': [{'file': 'tutorials/Schedule/daily_schedules.md'},
-                                          {'file': 'tutorials/Schedule/shared_calendars.md'},
-                                          {'file': 'tutorials/Schedule/timezone_widget.md'}
-                                         ]}]}
-    toc_list += [chapter]
-
     # Technical help chapter
     chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/tech_intro.md', 
                              'sections': [{'file': 'tutorials/TechnicalHelp/Jupyterbook.md',
@@ -82,12 +74,12 @@ def main():
                                          ]}]}
     toc_list += [chapter]
     for key in toc.keys():
-        
+
         # Add wrap-up if it exists
         wrapup_name = f'tutorials/Module_WrapUps/{key.replace(" ", "")}.ipynb'
         if os.path.exists(wrapup_name):
             toc[key]['chapters'].append({'file': wrapup_name})
-        
+
         toc_list.append(toc[key])
 
     with open('book/_toc.yml', 'w') as fh:
@@ -113,6 +105,7 @@ def open_in_colab_new_tab(content):
         anchor['target'] = '_blank'
     cells[0]['source'][0] = str(parsed_html)
     return content
+
 
 def link_hidden_cells(content):
     cells = content['cells']
@@ -171,6 +164,7 @@ def link_hidden_cells(content):
 
     content['cells'] = updated_cells
     return content
+
 
 def change_video_widths(content):
 
