@@ -24,8 +24,6 @@ def main():
 
     art_file_list = os.listdir('tutorials/Art/')
 
-    art_file_list = os.listdir('tutorials/Art/')
-
     for m in materials:
         directory = f"{m['day']}_{''.join(m['name'].split())}"
 
