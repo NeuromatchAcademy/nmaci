@@ -145,6 +145,11 @@ def main():
                                           {'file': 'tutorials/TechnicalHelp/Discord.md'}
                                          ]}]}
     toc_list += [chapter]
+
+    # Pre-reqs file
+    chapter = {'chapters': [{'file': 'prereqs/ComputationalNeuroscience.md'}]}
+    toc_list += [chapter]
+
     for key in toc.keys():
         
         # Add wrap-up if it exists
