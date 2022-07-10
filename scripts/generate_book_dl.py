@@ -123,7 +123,11 @@ def main():
                                           {'file': 'tutorials/TechnicalHelp/Discord.md'}
                                          ]}]}
     toc_list += [chapter]
-    
+
+    # Links and Policy file
+    chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/Links_Policy.md'}]}
+    toc_list += [chapter]
+
     # Pre-reqs file
     chapter = {'chapters': [{'file': 'prereqs/DeepLearning.md'}]}
     toc_list += [chapter]
