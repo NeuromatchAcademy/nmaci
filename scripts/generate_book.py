@@ -144,6 +144,10 @@ def main():
                                          ]}]}
     toc_list += [chapter]
 
+    # Links and Policy file
+    chapter = {'chapters': [{'file': 'tutorials/TechnicalHelp/Links_Policy.md'}]}
+    toc_list += [chapter]
+
     # Pre-reqs file
     chapter = {'chapters': [{'file': 'prereqs/ComputationalNeuroscience.md'}]}
     toc_list += [chapter]
