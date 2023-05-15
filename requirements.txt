@@ -8,3 +8,4 @@ pyyaml
 beautifulsoup4
 decorator==5.0.9
 Jinja2==3.0.0
+jupyter-client
