@@ -152,6 +152,11 @@ def main():
     chapter = {'chapters': [{'file': 'prereqs/ComputationalNeuroscience.md'}]}
     toc_list += [chapter]
 
+    # TA training file
+    if ARG == "instructor":
+        chapter = {'chapters': [{'file': 'tatraining/TA_Training_CN.md'}]}
+        toc_list += [chapter]
+
     for key in toc.keys():
         
         # Add wrap-up if it exists
