@@ -105,6 +105,12 @@ def main():
     if os.path.exists("tutorials/intro.ipynb"):
         pre_process_notebook('tutorials/intro.ipynb')
 
+    # TA training file
+    if ARG == "instructor":
+        chapter = {'chapters': [{'file': 'tatraining/TA_Training_DL.ipynb'}]}
+        pre_process_notebook('tatraining/TA_Training_DL.ipynb')
+        toc_list += [chapter]
+
     # Schedule chapter
     chapter = {'chapters': [{'file': 'tutorials/Schedule/schedule_intro.md',
                              'sections': [{'file': 'tutorials/Schedule/daily_schedules.md'},
@@ -131,12 +137,6 @@ def main():
     # Pre-reqs file
     chapter = {'chapters': [{'file': 'prereqs/DeepLearning.md'}]}
     toc_list += [chapter]
-
-    # TA training file
-    if ARG == "instructor":
-        chapter = {'chapters': [{'file': 'tatraining/TA_Training_DL.ipynb'}]}
-        pre_process_notebook('tatraining/TA_Training_DL.ipynb')
-        toc_list += [chapter]
 
     for key in toc.keys():
         # Add wrap-up if it exists
