@@ -154,7 +154,7 @@ def main():
 
     # TA training file
     if ARG == "instructor":
-        chapter = {'chapters': [{'file': 'tatraining/TA_Training_CN.md'}]}
+        chapter = {'chapters': [{'file': 'tatraining/TA_Training_CN.md', 'title': 'TA Training'}]}
         toc_list += [chapter]
 
     for key in toc.keys():
