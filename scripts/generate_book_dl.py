@@ -135,7 +135,7 @@ def main():
     # TA training file
     if ARG == "instructor":
         chapter = {'chapters': [{'file': 'tatraining/TA_Training_DL.ipynb'}]}
-        pre_process_notebook('tatraining/TA_Training_CN.ipynb.ipynb')
+        pre_process_notebook('tatraining/TA_Training_DL.ipynb')
         toc_list += [chapter]
 
     for key in toc.keys():
