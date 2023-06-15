@@ -243,16 +243,16 @@ def change_video_widths(content):
             for line in cell['source']:
                 if line.startswith('link_id'):
                     slide_link = line.split('"')[1]
-            download_link = f"https://osf.io/download/{slide_link}/"
-            render_link = f"https://mfr.ca-1.osf.io/render?url=https://osf.io/{slide_link}/?direct%26mode=render%26action=download%26mode=render"
-            cell['source'] = ['# @markdown\n',
-                              'from IPython.display import IFrame\n',
-                              'from ipywidgets import widgets\n',
-                              'out = widgets.Output()\n',
-                              'with out:\n',
-                              f'    print(f"If you want to download the slides: {download_link}")\n',
-                              f'    display(IFrame(src=f"{render_link}", width=730, height=410))\n',
-                              'display(out)']
+                    download_link = f"https://osf.io/download/{slide_link}/"
+                    render_link = f"https://mfr.ca-1.osf.io/render?url=https://osf.io/{slide_link}/?direct%26mode=render%26action=download%26mode=render"
+                    cell['source'] = ['# @markdown\n',
+                                      'from IPython.display import IFrame\n',
+                                      'from ipywidgets import widgets\n',
+                                      'out = widgets.Output()\n',
+                                      'with out:\n',
+                                      f'    print(f"If you want to download the slides: {download_link}")\n',
+                                      f'    display(IFrame(src=f"{render_link}", width=730, height=410))\n',
+                                      'display(out)']
     return content
 
 if __name__ == '__main__':
