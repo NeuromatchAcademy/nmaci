@@ -259,8 +259,8 @@ def change_video_widths(content):
                 cell['source'][ind] = cell['source'][ind].replace('480', '410')
 
         # Put slides in ipywidget so they don't overlap margin
-        if '# @title Tutorial slides\n' in cell['source'] or '## Slides' in content['cells'][i-1]['source']:
-            for line in cell.source.split("\n"):
+        if '# @title Tutorial slides\n' in cell['source'] or '# @title Slides\n' in cell['source'] or '## Slides' in content['cells'][i-1]['source']:
+            for line in cell['source'].split("\n"):
                 if line.startswith('link_id'):
                     slide_link = line.split('"')[1]
             download_link = f"https://osf.io/download/{slide_link}/"
