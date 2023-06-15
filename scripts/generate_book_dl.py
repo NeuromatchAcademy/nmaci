@@ -230,7 +230,7 @@ def link_hidden_cells(content):
 
 def change_video_widths(content):
 
-    for cell in content['cells']:
+    for i, cell in enumerate(content['cells']):
         if 'YouTubeVideo' in ''.join(cell['source']):
 
             for ind in range(len(cell['source'])):
@@ -239,8 +239,7 @@ def change_video_widths(content):
                 cell['source'][ind] = cell['source'][ind].replace('480', '410')
 
         # Put slides in ipywidget so they don't overlap margin
-        # cell that contains 'IFrame' and 'Tutorial slides' to avoid issues with irrelevant cells.
-        if '# @title Tutorial slides\n' in cell.source :
+        if '# @title Tutorial slides\n' in cell.source or '## Slides' in content['cells'][i-1]:
             for line in cell.source.split("\n"):
                 if line.startswith('link_id'):
                     slide_link = line.split('"')[1]
