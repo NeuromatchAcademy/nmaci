@@ -39,7 +39,7 @@ GITHUB_RAW_URL = (
     f"https://raw.githubusercontent.com/NeuromatchAcademy/{REPO}/{MAIN_BRANCH}"
 )
 GITHUB_TREE_URL = (
-    f"https://github.com/NeuromatchAcademy/{REPO}/tree/{MAIN_BRANCH}/"
+    f"https://github.com/NeuromatchAcademy/{REPO}/tree/{MAIN_BRANCH}"
 )
 
 
