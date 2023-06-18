@@ -168,7 +168,7 @@ def link_hidden_cells(content):
 
 def change_video_widths(content):
 
-    for cell in content['cells']:
+    for i, cell in enumerate(content['cells']):
         if 'YouTubeVideo' in ''.join(cell['source']):
 
             for ind in range(len(cell['source'])):
