@@ -5,6 +5,7 @@ Extract slide and video links from notebooks
 """
 import argparse
 import ast
+import collections
 import json
 import os
 import sys
@@ -33,8 +34,8 @@ def main(arglist):
         print("No notebook files found")
         sys.exit(0)
 
-    videos = {}
-    slides = {}
+    videos = collections.defaultdict(list)
+    slides = collections.defaultdict(list)
 
     for nb_path in nb_paths:
         # Load the notebook structure
@@ -56,17 +57,11 @@ def main(arglist):
                         url = bilibili_url(video_dict["Bilibili"])
                     else:
                         url = youtube_url(video_dict["Youtube"])
-                    if nb_name in videos:
-                        if videos[nb_name] != url:
-                            raise ValueError(f"Mismatching video urls for {nb_name}")
-                    videos[nb_name] = url
+                    videos[nb_name].append(url)
                 elif l.startswith("link_id = "):
                     rhs = l.split("=")[1].strip()
                     url = osf_url(ast.literal_eval(rhs))
-                    if nb_name in slides:
-                        if videos[slides] != url:
-                            raise ValueError(f"Mismatching video urls for {nb_name}")
-                    slides[nb_name] = url
+                    slides[nb_name].append(url)
 
     print(json.dumps({"videos": videos, "slides": slides}, sort_keys=True, indent=4))
 
