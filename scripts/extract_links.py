@@ -8,6 +8,8 @@ import ast
 import collections
 import json
 import os
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 import sys
 
 import nbformat
@@ -57,11 +59,26 @@ def main(arglist):
                         url = bilibili_url(video_dict["Bilibili"])
                     else:
                         url = youtube_url(video_dict["Youtube"])
-                    videos[nb_name].append(url)
+                    if url not in videos[nb_name]:
+                        videos[nb_name].append(url)
                 elif l.startswith("link_id = "):
                     rhs = l.split("=")[1].strip()
                     url = osf_url(ast.literal_eval(rhs))
-                    slides[nb_name].append(url)
+                    # Slides are sometimes used in multiple notebooks, so we
+                    # just store the filename and the link
+                    if url not in slides:
+                        api_request = f"https://api.osf.io/v2/files/{ast.literal_eval(rhs)}/"
+                        httprequest = Request(api_request,
+                                              headers={"Accept": "application/json"})
+                        try:
+                            with urlopen(httprequest) as response:
+                                data = json.load(response)
+                                filename = data["data"]["attributes"]["name"]
+                        except HTTPError as e:
+                            sys.stderr.write(str(e) + "\n")
+                            sys.stderr.write(f"Skipping slide {url}\n")
+                            continue
+                        slides[url] = filename
 
     print(json.dumps({"videos": videos, "slides": slides}, sort_keys=True, indent=4))
 
