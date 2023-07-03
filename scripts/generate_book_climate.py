@@ -106,9 +106,10 @@ def main():
 
 
     part = "Project Booklet"
-    toc[part]["chapters"].append(
-        {"file": "projects/README.md", "title": "Introduction"}
-    )
+    toc[part]['chapters'] = project_materials
+    # toc[part]["chapters"].append(
+    #     {"file": "projects/README.md", "title": "Introduction"}
+    # )
     # toc[part]["chapters"].append({"file": "projects/docs/project_guidance.md"})
 
     # Add Modeling Steps
@@ -147,18 +148,18 @@ def main():
     #     #             this_section['sections'].append({'file': notebook['link'], 'title': notebook['title']})
     #     #             pre_process_notebook(notebook['link'])
     #     project_datasets["sections"].append(this_section)
-    toc[part]["chapters"].append(project_datasets)
-    toc[part]["chapters"].append({"file": "projects/docs/project_templates.md"})
+    # toc[part]["chapters"].append(project_datasets)
+    # toc[part]["chapters"].append({"file": "projects/docs/project_templates.md"})
 
-    toc[part]["chapters"].append(
-        {"file": "projects/docs/continuing_your_project_after_the_course.md"})
+    # toc[part]["chapters"].append(
+    #     {"file": "projects/docs/continuing_your_project_after_the_course.md"})
     
-    toc[part]['chapters'].append(
-        {
-            "file": "projects/docs/project_guidance.md",
-            "sections": [{"file" : f"projects/project-notebooks/{nb}"} for nb in os.listdir(os.path.join("projects", "project-notebooks"))]
-        }
-    )
+    # toc[part]['chapters'].append(
+    #     {
+    #         "file": "projects/docs/project_guidance.md",
+    #         "sections": [{"file" : f"projects/project-notebooks/{nb}"} for nb in os.listdir(os.path.join("projects", "project-notebooks"))]
+    #     }
+    # )
 
     # Projects 2020
     # toc[part]["chapters"].append(
