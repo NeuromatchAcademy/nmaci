@@ -204,6 +204,7 @@ def main():
                     {
                         "file": "tutorials/TechnicalHelp/Jupyterbook.md",
                         "sections": [
+                            {"file": "tutorials/TechnicalHelp/Tutorial_jupyterhub.md"},
                             {"file": "tutorials/TechnicalHelp/Tutorial_colab.md"},
                             {"file": "tutorials/TechnicalHelp/Tutorial_kaggle.md"},
                         ],
