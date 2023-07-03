@@ -41,6 +41,8 @@ def main():
             toc[m["category"]] = {"part": m["category"], "chapters": []}
     # Add the project booklet
     toc["Project Booklet"] = {"part": "Project Booklet", "chapters": []}
+    toc["Professional Development"] = {
+        "part": "Professional Development", "chapters": []}
 
     art_file_list = os.listdir("tutorials/Art/")
 
@@ -99,6 +101,12 @@ def main():
 
         # Add chapter
         toc[part]["chapters"].append(chapter)
+
+    with open("professional_development/prof_dev_materials.yml") as fh:
+        prof_dev_materials = yaml.load(fh, Loader=yaml.FullLoader)
+
+    part = "Professional Development"
+    toc[part]['chapters'] = prof_dev_materials
 
     # Project chapter -- based on the repo
     with open("projects/project_materials.yml") as fh:
