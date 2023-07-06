@@ -48,7 +48,7 @@ def tutorial_order(fname):
     elif last.startswith("DaySummary"):
         order = 20
     else:
-        raise ValueError(last)
+        order = 30
     return (week, day, order)
 
 def main(arglist):
