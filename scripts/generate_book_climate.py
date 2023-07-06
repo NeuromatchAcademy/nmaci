@@ -229,7 +229,7 @@ def main():
     toc_list += [chapter]
 
     # Pre-reqs file
-    chapter = {"chapters": [{"file": "prereqs/ComputationalNeuroscience.md"}]}
+    chapter = {"chapters": [{"file": "prereqs/ClimateScience.md"}]}
     toc_list += [chapter]
 
     for key in toc.keys():

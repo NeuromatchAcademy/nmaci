@@ -38,7 +38,7 @@ def main(arglist):
     unmatched = {}
 
     for nb_fpath in args.files:
-
+        print(nb_fpath)
         _, nb_name = os.path.split(nb_fpath)
         unmatched[nb_name] = []
 
@@ -191,7 +191,7 @@ def unmatched_lines(stub_lines, solu_lines):
         best_line = ""
 
         for line in solu_lines:
-
+            # print(line)
             # Match whole lines or parts of lines that need completion
             if "..." in stub_line:
                 part_scores = []
