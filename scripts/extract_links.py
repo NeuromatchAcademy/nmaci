@@ -26,12 +26,36 @@ def youtube_url(video_id):
 def osf_url(link_id):
     return f"https://osf.io/download/{link_id}"
 
+def tutorial_order(fname):
+    fname = os.path.basename(fname)
+    try:
+        first, last = fname.split("_")
+    except ValueError:
+        return (99, 99, fname)
+    if first == "Bonus":
+        week, day = 9, 9
+    else:
+        week, day = int(first[1]), int(first[3])
+    if last.startswith("Intro"):
+        order = 0
+    elif last.startswith("Tutorial"):
+        order = int(last[8])
+    elif last.startswith("Outro"):
+        order = 10
+    elif last.startswith("DaySummary"):
+        order = 20
+    else:
+        raise ValueError(last)
+    return (week, day, order)
 
 def main(arglist):
     """Process IPython notebooks from a list of files."""
     args = parse_args(arglist)
 
-    nb_paths = [arg for arg in args.files if arg.endswith(".ipynb")]
+    nb_paths = [arg for arg in args.files
+                if arg.endswith(".ipynb") and
+                   'student' not in arg and
+                   'instructor' not in arg]
     if not nb_paths:
         print("No notebook files found")
         sys.exit(0)
@@ -39,7 +63,7 @@ def main(arglist):
     videos = collections.defaultdict(list)
     slides = collections.defaultdict(list)
 
-    for nb_path in nb_paths:
+    for nb_path in sorted(nb_paths, key=tutorial_order):
         # Load the notebook structure
         with open(nb_path) as f:
             nb = nbformat.read(f, nbformat.NO_CONVERT)
@@ -55,10 +79,14 @@ def main(arglist):
                 if l.startswith("video_ids = "):
                     rhs = l.split("=")[1].strip()
                     video_dict = dict(ast.literal_eval(rhs))
-                    if args.noyoutube:
-                        url = bilibili_url(video_dict["Bilibili"])
-                    else:
-                        url = youtube_url(video_dict["Youtube"])
+                    try:
+                        if args.noyoutube:
+                            url = bilibili_url(video_dict["Bilibili"])
+                        else:
+                            url = youtube_url(video_dict["Youtube"])
+                    except KeyError:
+                        print(f"Malformed video id in {nb_name}? '{rhs}'")
+                        continue
                     if url not in videos[nb_name]:
                         videos[nb_name].append(url)
                 elif l.startswith("link_id = "):
@@ -78,9 +106,11 @@ def main(arglist):
                             sys.stderr.write(str(e) + "\n")
                             sys.stderr.write(f"Skipping slide {url}\n")
                             continue
+                        if 'DaySummary' in nb_name:
+                            filename = os.path.splitext(filename.replace("_", ""))[0] + '_DaySummary.pdf'
                         slides[url] = filename
 
-    print(json.dumps({"videos": videos, "slides": slides}, sort_keys=True, indent=4))
+    print(json.dumps({"videos": videos, "slides": slides}, indent=4))
 
 
 def parse_args(arglist):
