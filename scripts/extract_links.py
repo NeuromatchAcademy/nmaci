@@ -32,10 +32,13 @@ def tutorial_order(fname):
         first, last = fname.split("_")
     except ValueError:
         return (99, 99, fname)
-    if first == "Bonus":
+    if first.startswith("Bonus"):
         week, day = 9, 9
     else:
-        week, day = int(first[1]), int(first[3])
+        try:
+            week, day = int(first[1]), int(first[3])
+        except ValueError:
+            week, day = 9, 9
     if last.startswith("Intro"):
         order = 0
     elif last.startswith("Tutorial"):
