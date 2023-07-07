@@ -54,9 +54,12 @@ def main():
             title_page = f"# {m['name']}"
             art_file = [fname for fname in art_file_list if m["day"] in fname]
             if len(art_file) == 1:
-                artist = art_file[0].split("-")[1].split(".")[0]
-                artist = artist.replace("_", " ")
-                title_page += f"\n\n ````{{div}} full-width \n <img src='../Art/{art_file[0]}' alt='art relevant to chapter contents' width='100%'> \n```` \n\n*Artwork by {artist}*"
+                try:
+                    artist = art_file[0].split("-")[1].split(".")[0]
+                    artist = artist.replace("_", " ")
+                except IndexError:
+                    artist = "Climatematch"
+                title_page += f"\n\n ````{{div}} full-height \n <img src='../Art/{art_file[0]}' alt='art relevant to chapter contents' width='100%'> \n```` \n\n*Artwork by {artist}*"
             title_file.write(title_page)
 
         chapter = {
@@ -102,7 +105,7 @@ def main():
         # Add chapter
         toc[part]["chapters"].append(chapter)
 
-    with open("professional_development/prof_dev_materials.yml") as fh:
+    with open("projects/professional_development/prof_dev_materials.yml") as fh:
         prof_dev_materials = yaml.load(fh, Loader=yaml.FullLoader)
 
     part = "Professional Development"
@@ -229,7 +232,7 @@ def main():
     toc_list += [chapter]
 
     # Pre-reqs file
-    chapter = {"chapters": [{"file": "prereqs/ClimateScience.md"}]}
+    chapter = {"chapters": [{"file": "tutorials/prereqs/ClimateScience.md"}]}
     toc_list += [chapter]
 
     for key in toc.keys():
