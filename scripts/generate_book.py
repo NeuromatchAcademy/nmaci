@@ -125,11 +125,11 @@ def main():
     if os.path.exists(f"tutorials/intro.ipynb"):
         pre_process_notebook(f"tutorials/intro.ipynb")
 
-    # TA training file
-    if ARG == "instructor":
-        chapter = {'chapters': [{'file': 'tatraining/TA_Training_CN.ipynb'}]}
-        pre_process_notebook('tatraining/TA_Training_CN.ipynb')
-        toc_list += [chapter]
+    # TA training file (now in slite)
+    # if ARG == "instructor":
+    #     chapter = {'chapters': [{'file': 'tatraining/TA_Training_CN.ipynb'}]}
+    #     pre_process_notebook('tatraining/TA_Training_CN.ipynb')
+    #     toc_list += [chapter]
     # Schedule chapter
     chapter = {'chapters': [{'file': 'tutorials/Schedule/schedule_intro.md',
                              'sections': [{'file': 'tutorials/Schedule/daily_schedules.md'},
