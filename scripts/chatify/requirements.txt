@@ -1,0 +1,5 @@
+chatify @ git+https://github.com/ContextLab/chatify
+nbformat
+davos
+tqdm
+gptcache
