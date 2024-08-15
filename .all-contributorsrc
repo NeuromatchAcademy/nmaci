@@ -26,6 +26,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "iamzoltan",
+      "name": "Zoltan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21369773?v=4",
+      "profile": "https://github.com/iamzoltan",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
