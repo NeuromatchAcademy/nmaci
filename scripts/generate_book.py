@@ -109,7 +109,7 @@ def main():
 #             pre_process_notebook(notebook['link'])
         project_datasets['sections'].append(this_section)
     toc[part]['chapters'].append(project_datasets)
-    toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
+    # toc[part]['chapters'].append({'file': 'projects/docs/project_templates.md'})
 
     # Projects 2020
     toc[part]['chapters'].append({'file': 'projects/docs/project_2020_highlights.md',
