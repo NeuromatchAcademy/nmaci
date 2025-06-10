@@ -91,7 +91,7 @@ def main():
     # Loop over dataset types
     project_datasets = {'file': 'projects/docs/datasets_overview.md', 'sections': []}
 
-    for category in ['neurons', 'fMRI', 'ECoG', 'behavior-and-theory']:
+    for category in ['neurons', 'fMRI', 'ECoG', 'behavior_and_theory']:
         this_section = {'file': f'projects/docs/{category}.md', 'sections': []}
 
         # Add README guide
