@@ -28,7 +28,7 @@ def main():
 
             # Remove div if it has an error
             for div in mydivs:
-                if 'NotImplementedError' in str(div) or 'NameError' in str(div):
+                if any(err in str(div) for err in ('NotImplementedError', 'NameError', 'ValueError', 'KeyboardInterrupt')):
                     div.decompose()
 
             # Put solution figures in center (to fix layout issues) 
