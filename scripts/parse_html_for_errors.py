@@ -31,6 +31,12 @@ def main():
                 if any(err in str(div) for err in ('NotImplementedError', 'NameError', 'ValueError', 'KeyboardInterrupt')):
                     div.decompose()
 
+            # Remove widget outputs (e.g. from @widgets.interact) that contain an error
+            widget_divs = parsed_html.find_all("div", {"data-mime-type": "application/vnd.jupyter.stderr"})
+            for div in widget_divs:
+                if any(err in str(div) for err in ('NotImplementedError', 'NameError', 'ValueError', 'KeyboardInterrupt')):
+                    div.decompose()
+
             # Put solution figures in center (to fix layout issues) 
             for img in parsed_html.find_all('img', alt= True):
                 if img['alt'] == 'Solution hint':
