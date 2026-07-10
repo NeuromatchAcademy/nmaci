@@ -1,3 +1,4 @@
+import json
 import yaml
 import sys
 from bs4 import BeautifulSoup
@@ -36,6 +37,25 @@ def main():
             for div in widget_divs:
                 if any(err in str(div) for err in ('NotImplementedError', 'NameError', 'ValueError', 'KeyboardInterrupt')):
                     div.decompose()
+
+            # Remove error outputs from saved widget state (re-rendered by JS on page load)
+            for script in parsed_html.find_all("script", {"type": "application/vnd.jupyter.widget-state+json"}):
+                state = json.loads(script.string)
+                for model in state.get("state", {}).values():
+                    outputs = model.get("state", {}).get("outputs")
+                    if not outputs:
+                        continue
+                    model["state"]["outputs"] = [
+                        o for o in outputs
+                        if not (
+                            o.get("output_type") == "error"
+                            or (o.get("output_type") == "stream"
+                                and o.get("name") == "stderr"
+                                and any(err in str(o.get("text", "")) for err in
+                                        ('NotImplementedError', 'NameError', 'ValueError', 'KeyboardInterrupt')))
+                        )
+                    ]
+                script.string = json.dumps(state)
 
             # Put solution figures in center (to fix layout issues) 
             for img in parsed_html.find_all('img', alt= True):
